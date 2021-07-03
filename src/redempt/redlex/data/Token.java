@@ -287,6 +287,15 @@ public class Token {
 	}
 	
 	/**
+	 * Find all tokens in the tree by name, breadth-first
+	 * @param name The name of the token to search for
+	 * @return All tokens found
+	 */
+	public List<Token> allByName(String name) {
+		return allByName(TraversalOrder.BREADTH_FIRST, name);
+	}
+	
+	/**
 	 * Find all tokens in the tree by any number of names and create a map, breadth-first
 	 * @param names The names to look for
 	 * @return A map of names to the tokens with those names
