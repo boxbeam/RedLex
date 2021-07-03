@@ -3,6 +3,8 @@ package redempt.redlex.test;
 import org.junit.jupiter.api.Test;
 import redempt.redlex.bnf.BNFParser;
 import redempt.redlex.data.Token;
+import redempt.redlex.exception.BNFException;
+import redempt.redlex.exception.LexException;
 import redempt.redlex.processing.CullStrategy;
 import redempt.redlex.processing.Lexer;
 import redempt.redlex.processing.TokenFilter;
@@ -18,8 +20,8 @@ public class RedLexTest {
 	
 	@Test
 	public void syntaxTest() {
-		assertThrows(IllegalArgumentException.class, () -> bnf.createLexer("root::= [a-z]"));
-		assertThrows(IllegalArgumentException.class, () -> bnf.createLexer("root ::= \"abc"));
+		assertThrows(LexException.class, () -> bnf.createLexer("root::= [a-z]"));
+		assertThrows(LexException.class, () -> bnf.createLexer("root ::= \"abc"));
 		assertDoesNotThrow(() -> bnf.createLexer("root ::= \"abc\" | [a-z]"));
 	}
 	
@@ -28,6 +30,12 @@ public class RedLexTest {
 				TokenFilter.removeUnnamed(CullStrategy.LIFT_CHILDREN),
 				TokenFilter.byName(CullStrategy.DELETE_ALL, "sep"),
 				TokenFilter.removeStringLiterals());
+	}
+	
+	@Test
+	public void selfReferenceTest() {
+		assertThrows(BNFException.class, () -> bnf.createLexer("root ::= root"));
+		assertThrows(BNFException.class, () -> bnf.createLexer("root ::= test"));
 	}
 	
 	@Test

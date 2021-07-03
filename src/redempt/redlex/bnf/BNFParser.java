@@ -2,6 +2,7 @@ package redempt.redlex.bnf;
 
 import redempt.redlex.data.Token;
 import redempt.redlex.data.TokenType;
+import redempt.redlex.exception.BNFException;
 import redempt.redlex.processing.CullStrategy;
 import redempt.redlex.processing.Lexer;
 import redempt.redlex.processing.TokenFilter;
@@ -132,12 +133,12 @@ public class BNFParser {
 		}
 		TokenType root = tokens.get("root");
 		if (root == null) {
-			throw new IllegalArgumentException("No root node specified");
+			throw new BNFException("No root node specified");
 		}
 		Set<String> used = new HashSet<>();
 		while (root instanceof PlaceholderToken) {
 			if (!used.add(root.getName())) {
-				throw new IllegalArgumentException("Circular reference or undefined tokens: " + String.join(", ", used));
+				throw new BNFException("Circular reference or undefined tokens: " + String.join(", ", used));
 			}
 			root = tokens.get(root.getName());
 		}
