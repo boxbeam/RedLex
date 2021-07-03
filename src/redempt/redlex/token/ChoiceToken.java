@@ -47,7 +47,7 @@ public class ChoiceToken extends TokenType implements ParentToken {
 		for (TokenType child : children) {
 			Token inst = child.findForward(str, pos, ctx);
 			if (inst != null) {
-				return inst;
+				return new Token(this, inst.getBaseString(), inst.getStart(), inst.getEnd(), new Token[] {inst});
 			}
 		}
 		return null;

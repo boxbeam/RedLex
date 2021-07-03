@@ -83,8 +83,8 @@ public class BNFParser {
 		Token token = lexer.tokenize(input);
 		token.cull(TokenFilter.removeEmpty(),
 				TokenFilter.removeUnnamed(CullStrategy.DELETE_ALL),
-				TokenFilter.byName(CullStrategy.DELETE_ALL, "whitespace", "::=", "comment"),
-				TokenFilter.byName(CullStrategy.LIFT_CHILDREN, "modifiers", "statementList"));
+				TokenFilter.byName(CullStrategy.DELETE_ALL, "whitespace", "::=", "comment", "validChar"),
+				TokenFilter.byName(CullStrategy.LIFT_CHILDREN, "modifiers", "statementList", "tokenOrNested", "tokenOrStatement", "tokenBase", "sentencesRep", "separator"));
 		Map<String, List<Token>> map = token.allByNames(TraversalOrder.DEPTH_LEAF_FIRST,
 				"escapeSequence", "statementOpt", "token", "sentence", "nested");
 		for (Token escape : map.get("escapeSequence")) {

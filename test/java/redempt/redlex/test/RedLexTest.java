@@ -23,11 +23,13 @@ public class RedLexTest {
 		assertDoesNotThrow(() -> BNFParser.createLexer("root ::= \"abc\" | [a-z]"));
 	}
 	
-	private void cullJSON(Token token) {
+	private Token cullJSON(Token token) {
 		token.cull(TokenFilter.removeEmpty(),
 				TokenFilter.removeUnnamed(CullStrategy.LIFT_CHILDREN),
 				TokenFilter.byName(CullStrategy.DELETE_ALL, "sep"),
+				TokenFilter.byName(CullStrategy.LIFT_CHILDREN, "object"),
 				TokenFilter.removeStringLiterals());
+		return token.getChildren()[0];
 	}
 	
 	@Test
@@ -38,16 +40,15 @@ public class RedLexTest {
 	
 	@Test
 	public void JSONTest() {
-		Path path = Paths.get("res/json.bnf");
-		Lexer lexer = BNFParser.createLexer(path);
+		Lexer lexer = BNFParser.createLexer(getClass().getClassLoader().getResourceAsStream("json.bnf"));
 		Token token = lexer.tokenize("123");
-		cullJSON(token);
+		token = cullJSON(token);
 		assertEquals("integer [123]", token.toString());
 		token = lexer.tokenize("{\"a\": [1, 2, 3, \"b\"]}");
-		cullJSON(token);
+		token = cullJSON(token);
 		assertEquals("map {mapEntry {string [\"a\"], list {integer [1], integer [2], integer [3], string [\"b\"]}}}", token.toString());
 		token = lexer.tokenize("[[[[[[]]]]]]");
-		cullJSON(token);
+		token = cullJSON(token);
 		assertEquals("list {list {list {list {list {list [[]]}}}}}", token.toString());
 	}
 	

@@ -95,11 +95,11 @@ class BNFLexer {
 		TokenType bar = new StringToken("|", "|");
 		TokenType barSepOpt = new ListToken("|", opsep, bar, opsep);
 		TokenType separatorChoice = new ChoiceToken("separator", barSepOpt, sep);
-		TokenType tokenOrStatement = new ChoiceToken("token or statement", token, statement, nested);
+		TokenType tokenOrStatement = new ChoiceToken("tokenOrStatement", token, statement, nested);
 		TokenType restList = new ListToken("statementList", separatorChoice, tokenOrStatement);
 		TokenType restRep = new RepeatingToken("statementRest", restList);
 		TokenType restOpt = new OptionalToken("statementOpt", restRep);
-		TokenType tokenOrNestedStatement = new ChoiceToken("token", token, nested);
+		TokenType tokenOrNestedStatement = new ChoiceToken("tokenOrNested", token, nested);
 		TokenType statement = new ListToken("statement", tokenOrNestedStatement, restOpt);
 		Map<String, TokenType> map = new HashMap<>();
 		map.put("statement", statement);
@@ -111,7 +111,7 @@ class BNFLexer {
 		TokenType sepOrEnd = new ChoiceToken("sep", newlineRep, new EndOfFileToken("eof"));
 		TokenType line = new ChoiceToken("line", comment, sentence);
 		TokenType sentenceList = new ListToken("sentences", line, sepOrEnd);
-		TokenType sentenceRep = new RepeatingToken("sentences", sentenceList);
+		TokenType sentenceRep = new RepeatingToken("sentencesRep", sentenceList);
 		return sentenceRep;
 	}
 	
