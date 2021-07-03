@@ -4,18 +4,18 @@ import redempt.redlex.data.TokenType;
 
 public class CharGroupToken extends TokenType {
 	
-	private char min;
-	private char max;
+	private int min;
+	private int max;
 	private boolean inverted;
 	
-	public CharGroupToken(String name, char min, char max, boolean inverted) {
+	public CharGroupToken(String name, int min, int max, boolean inverted) {
 		super(name);
 		this.min = min;
 		this.max = max;
 		this.inverted = inverted;
 	}
 	
-	public CharGroupToken(String name, char min, char max) {
+	public CharGroupToken(String name, int min, int max) {
 		this(name, min, max, false);
 	}
 	

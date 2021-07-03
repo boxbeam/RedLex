@@ -237,9 +237,14 @@ public class BNFParser {
 		}
 		Token setOpt = token.firstByName("setOpt");
 		if (setOpt == null) {
-			return new CharSetToken(null, caret != null);
+			return new CharGroupToken(null, -1, -1, caret != null);
 		}
-		return new CharSetToken(null, caret != null, setOpt.joinLeaves("").toCharArray());
+		String str = setOpt.joinLeaves("");
+		if (str.length() == 1) {
+			char c = str.charAt(0);
+			return new CharGroupToken(null, c, c, caret != null);
+		}
+		return new CharSetToken(null, caret != null, str.toCharArray());
 	}
 	
 	private static TokenType createCharGroup(Token charGroup) {
