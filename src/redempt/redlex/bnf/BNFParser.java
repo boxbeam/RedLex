@@ -8,7 +8,10 @@ import redempt.redlex.processing.TokenFilter;
 import redempt.redlex.processing.TraversalOrder;
 import redempt.redlex.token.*;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -17,6 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 /**
@@ -61,6 +65,26 @@ public class BNFParser {
 		try {
 			String contents = Files.lines(path).collect(Collectors.joining("\n"));
 			return createLexer(contents);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	/**
+	 * Parses the input String and returns a Lexer
+	 * @param stream The InputStream the bnf contents can be read from
+	 * @return A Lexer for the given format
+	 */
+	public Lexer createLexer(InputStream stream) {
+		try {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+			String line = "";
+			StringJoiner joiner = new StringJoiner("\n");
+			while ((line = reader.readLine()) != null) {
+				joiner.add(line);
+			}
+			return createLexer(joiner.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;

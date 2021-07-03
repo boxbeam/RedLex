@@ -62,7 +62,7 @@ class BNFLexer {
 		TokenType notNewline = new CharSetToken("notNewline", true, '\n');
 		TokenType notNewlineRep = new RepeatingToken("comment", notNewline);
 		TokenType notNewlineOpt = new OptionalToken("comment", notNewlineRep);
-		TokenType comment = new ListToken("comment", commentPrefix, notNewlineOpt);
+		TokenType comment = new ListToken("comment", opsep, commentPrefix, notNewlineOpt);
 		return comment;
 	}
 	
