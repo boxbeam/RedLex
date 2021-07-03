@@ -16,13 +16,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class RedLexTest {
 	
-	private static BNFParser bnf = BNFParser.getParser();
-	
 	@Test
 	public void syntaxTest() {
-		assertThrows(LexException.class, () -> bnf.createLexer("root::= [a-z]"));
-		assertThrows(LexException.class, () -> bnf.createLexer("root ::= \"abc"));
-		assertDoesNotThrow(() -> bnf.createLexer("root ::= \"abc\" | [a-z]"));
+		assertThrows(LexException.class, () -> BNFParser.createLexer("root::= [a-z]"));
+		assertThrows(LexException.class, () -> BNFParser.createLexer("root ::= \"abc"));
+		assertDoesNotThrow(() -> BNFParser.createLexer("root ::= \"abc\" | [a-z]"));
 	}
 	
 	private void cullJSON(Token token) {
@@ -34,14 +32,14 @@ public class RedLexTest {
 	
 	@Test
 	public void selfReferenceTest() {
-		assertThrows(BNFException.class, () -> bnf.createLexer("root ::= root"));
-		assertThrows(BNFException.class, () -> bnf.createLexer("root ::= test"));
+		assertThrows(BNFException.class, () -> BNFParser.createLexer("root ::= root"));
+		assertThrows(BNFException.class, () -> BNFParser.createLexer("root ::= test"));
 	}
 	
 	@Test
 	public void JSONTest() {
 		Path path = Paths.get("res/json.bnf");
-		Lexer lexer = bnf.createLexer(path);
+		Lexer lexer = BNFParser.createLexer(path);
 		Token token = lexer.tokenize("123");
 		cullJSON(token);
 		assertEquals("integer [123]", token.toString());

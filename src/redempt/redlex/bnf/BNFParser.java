@@ -29,20 +29,7 @@ import java.util.stream.Collectors;
  */
 public class BNFParser {
 	
-	private static BNFParser parser;
-	
-	/**
-	 * @return The BNFParser instance
-	 */
-	public static BNFParser getParser() {
-		if (parser == null) {
-			Lexer lexer = BNFLexer.getLexer();
-			parser = new BNFParser(lexer);
-		}
-		return parser;
-	}
-	
-	private Lexer lexer;
+	private static Lexer lexer = BNFLexer.getLexer();
 	
 	private BNFParser(Lexer lexer) {
 		this.lexer = lexer;
@@ -53,7 +40,7 @@ public class BNFParser {
 	 * @param input The input String defining the format for the Lexer
 	 * @return A Lexer for the given format
 	 */
-	public Lexer createLexer(String input) {
+	public static Lexer createLexer(String input) {
 		return new Lexer(parse(input));
 	}
 	
@@ -62,7 +49,7 @@ public class BNFParser {
 	 * @param path The path to a file containing the format for the Lexer
 	 * @return A Lexer for the given format
 	 */
-	public Lexer createLexer(Path path) {
+	public static Lexer createLexer(Path path) {
 		try {
 			String contents = Files.lines(path).collect(Collectors.joining("\n"));
 			return createLexer(contents);
@@ -77,7 +64,7 @@ public class BNFParser {
 	 * @param stream The InputStream the bnf contents can be read from
 	 * @return A Lexer for the given format
 	 */
-	public Lexer createLexer(InputStream stream) {
+	public static Lexer createLexer(InputStream stream) {
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 			String line = "";
@@ -92,7 +79,7 @@ public class BNFParser {
 		}
 	}
 	
-	private TokenType parse(String input) {
+	private static TokenType parse(String input) {
 		Token token = lexer.tokenize(input);
 		token.cull(TokenFilter.removeEmpty(),
 				TokenFilter.removeUnnamed(CullStrategy.DELETE_ALL),
@@ -146,7 +133,7 @@ public class BNFParser {
 		return root;
 	}
 	
-	private TokenType createToken(Token input, Map<String, TokenType> map) {
+	private static TokenType createToken(Token input, Map<String, TokenType> map) {
 		Token[] children = input.getChildren();
 		boolean not = children[0].getType().getName().equals("!");
 		Token token = children[not ? 1 : 0];
@@ -177,7 +164,7 @@ public class BNFParser {
 		return type;
 	}
 	
-	private TokenType processModifier(TokenType type, Token modifier) {
+	private static TokenType processModifier(TokenType type, Token modifier) {
 		if (modifier != null) {
 			switch (modifier.getValue().charAt(0)) {
 				case '+':
@@ -194,7 +181,7 @@ public class BNFParser {
 		return type;
 	}
 	
-	private TokenType processSentence(Token sentence) {
+	private static TokenType processSentence(Token sentence) {
 		for (Token t : sentence.allByName(TraversalOrder.DEPTH_LEAF_FIRST, "nested")) {
 			Token statement = t.firstByName("statement");
 			TokenType token = createStatement(statement);
@@ -210,7 +197,7 @@ public class BNFParser {
 		return createStatement(sentence.firstByName("statement"));
 	}
 	
-	private TokenType createStatement(Token statement) {
+	private static TokenType createStatement(Token statement) {
 		statement.cull(TokenFilter.byName(CullStrategy.LIFT_CHILDREN, "statement"));
 		List<List<Token>> split = statement.splitChildren("|");
 		List<TokenType> merged = new ArrayList<>();
@@ -231,7 +218,7 @@ public class BNFParser {
 		return new ChoiceToken(null, merged.toArray(new TokenType[0]));
 	}
 	
-	private TokenType createString(Token strOpt) {
+	private static TokenType createString(Token strOpt) {
 		if (strOpt == null) {
 			return new StringToken(null, "");
 		}
@@ -239,11 +226,11 @@ public class BNFParser {
 		return new StringToken("'" + val, strOpt.joinLeaves(""));
 	}
 	
-	private TokenType createTokenReference(Token t) {
+	private static TokenType createTokenReference(Token t) {
 		return new PlaceholderToken(t.getValue());
 	}
 	
-	private TokenType createCharset(Token token) {
+	private static TokenType createCharset(Token token) {
 		Token caret = token.firstByName("^");
 		if (caret != null) {
 			caret.remove();
@@ -255,7 +242,7 @@ public class BNFParser {
 		return new CharSetToken(null, caret != null, setOpt.joinLeaves("").toCharArray());
 	}
 	
-	private TokenType createCharGroup(Token charGroup) {
+	private static TokenType createCharGroup(Token charGroup) {
 		Token caret = charGroup.firstByName("^");
 		if (caret != null) {
 			caret.remove();
