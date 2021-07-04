@@ -58,7 +58,7 @@ public class RepeatingToken extends TokenType implements ParentToken {
 			}
 		}
 		if (list.size() > 0) {
-			return new Token(this, str, start, pos, list.toArray(new Token[0]));
+			return new Token(this, str, start, pos, list.toArray(Token.EMPTY));
 		}
 		return null;
 	}

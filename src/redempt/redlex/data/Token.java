@@ -15,6 +15,8 @@ import java.util.function.Consumer;
  */
 public class Token {
 	
+	public static Token[] EMPTY = new Token[0];
+	
 	private Token parent;
 	private int index;
 	private TokenType type;
@@ -54,7 +56,7 @@ public class Token {
 					break;
 			}
 		}
-		return list.toArray(new Token[0]);
+		return list.toArray(Token.EMPTY);
 	}
 	
 	public Token(TokenType type, String value, int start, int end) {
@@ -67,7 +69,7 @@ public class Token {
 	 */
 	public void setChildren(Token[] children) {
 		if (children == null) {
-			this.children = new Token[0];
+			this.children = EMPTY;
 			return;
 		}
 		this.children = children;
@@ -447,7 +449,7 @@ public class Token {
 			}
 		}
 		
-		setChildren(list.toArray(new Token[0]));
+		setChildren(list.toArray(Token.EMPTY));
 		for (Token child : children) {
 			child.cull(filters);
 		}

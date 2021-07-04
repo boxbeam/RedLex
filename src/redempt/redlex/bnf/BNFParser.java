@@ -215,7 +215,7 @@ public class BNFParser {
 		if (merged.size() == 1) {
 			return merged.get(0);
 		}
-		return new ChoiceToken(null, merged.toArray(new TokenType[0]));
+		return new ChoiceToken(null, merged.toArray(new TokenType[merged.size()]));
 	}
 	
 	private static TokenType createString(Token strOpt) {
