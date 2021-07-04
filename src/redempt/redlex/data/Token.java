@@ -1,6 +1,7 @@
 package redempt.redlex.data;
 
 import redempt.redlex.processing.CullStrategy;
+import redempt.redlex.processing.Lexer;
 import redempt.redlex.processing.ObjectToken;
 import redempt.redlex.processing.ArrayUtils;
 import redempt.redlex.processing.TokenFilter;
@@ -28,7 +29,32 @@ public class Token {
 		this.value = value;
 		this.start = start;
 		this.end = end;
-		setChildren(children);
+		setChildren(processChildren(children));
+	}
+	
+	private Token[] processChildren(Token[] children) {
+		Lexer lexer = type.getLexer();
+		if (lexer == null || children == null) {
+			return children;
+		}
+		List<Token> list = new ArrayList<>();
+		for (Token child : children) {
+			switch (lexer.getStrategy(child)) {
+				case DELETE_ALL:
+					break;
+				case IGNORE:
+					list.add(child);
+					break;
+				case DELETE_CHILDREN:
+					child.setChildren(null);
+					list.add(child);
+					break;
+				case LIFT_CHILDREN:
+					Collections.addAll(list, child.getChildren());
+					break;
+			}
+		}
+		return list.toArray(new Token[0]);
 	}
 	
 	public Token(TokenType type, String value, int start, int end) {
@@ -393,7 +419,7 @@ public class Token {
 	}
 	
 	/**
-	 * Culls tokens in the tokens which are descendants of this one using filters
+	 * Culls tokens in the tokens which are descendants of this one using filters.
 	 * @param filters The filters to cull tokens with
 	 */
 	public void cull(TokenFilter... filters) {

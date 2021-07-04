@@ -1,5 +1,6 @@
 package redempt.redlex.data;
 
+import redempt.redlex.processing.Lexer;
 import redempt.redlex.token.PlaceholderToken;
 
 import java.util.HashSet;
@@ -13,6 +14,7 @@ import java.util.function.Consumer;
 public abstract class TokenType {
 	
 	private String name;
+	private Lexer lexer;
 	
 	/**
 	 * Create a new TokenType with the given name
@@ -20,6 +22,33 @@ public abstract class TokenType {
 	 */
 	public TokenType(String name) {
 		this.name = name;
+	}
+	
+	/**
+	 * Sets the Lexer this TokenType and its children belong to
+	 * @param lexer The Lexer
+	 */
+	public void setLexer(Lexer lexer) {
+		setLexer(lexer, new HashSet<>());
+	}
+	
+	private void setLexer(Lexer lexer, Set<TokenType> seen) {
+		if (!seen.add(this)) {
+			return;
+		}
+		this.lexer = lexer;
+		if (this instanceof ParentToken) {
+			for (TokenType child : ((ParentToken) this).getChildren()) {
+				child.setLexer(lexer, seen);
+			}
+		}
+	}
+	
+	/**
+	 * @return The Lexer this TokenType belongs to
+	 */
+	public Lexer getLexer() {
+		return lexer;
 	}
 	
 	/**

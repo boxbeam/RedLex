@@ -29,10 +29,14 @@ import java.util.stream.Collectors;
  */
 public class BNFParser {
 	
-	private static Lexer lexer = BNFLexer.getLexer();
+	private static Lexer lexer;
 	
-	private BNFParser(Lexer lexer) {
-		this.lexer = lexer;
+	static {
+		 lexer = BNFLexer.getLexer();
+		 lexer.setUnnamedRule(CullStrategy.DELETE_ALL);
+		 lexer.setRetainEmpty(false);
+		 lexer.setRuleByName(CullStrategy.DELETE_ALL, "whitespace", "::=", "comment", "validChar");
+		 lexer.setRuleByName(CullStrategy.LIFT_CHILDREN, "modifiers", "statementList", "tokenOrNested", "tokenOrStatement", "tokenBase", "sentencesRep", "separator");
 	}
 	
 	/**
@@ -81,10 +85,6 @@ public class BNFParser {
 	
 	private static TokenType parse(String input) {
 		Token token = lexer.tokenize(input);
-		token.cull(TokenFilter.removeEmpty(),
-				TokenFilter.removeUnnamed(CullStrategy.DELETE_ALL),
-				TokenFilter.byName(CullStrategy.DELETE_ALL, "whitespace", "::=", "comment", "validChar"),
-				TokenFilter.byName(CullStrategy.LIFT_CHILDREN, "modifiers", "statementList", "tokenOrNested", "tokenOrStatement", "tokenBase", "sentencesRep", "separator"));
 		Map<String, List<Token>> map = token.allByNames(TraversalOrder.DEPTH_LEAF_FIRST,
 				"escapeSequence", "statementOpt", "token", "sentence", "nested");
 		for (Token escape : map.get("escapeSequence")) {

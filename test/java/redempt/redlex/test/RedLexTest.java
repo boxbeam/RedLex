@@ -24,11 +24,6 @@ public class RedLexTest {
 	}
 	
 	private Token cullJSON(Token token) {
-		token.cull(TokenFilter.removeEmpty(),
-				TokenFilter.removeUnnamed(CullStrategy.LIFT_CHILDREN),
-				TokenFilter.byName(CullStrategy.DELETE_ALL, "sep"),
-				TokenFilter.byName(CullStrategy.LIFT_CHILDREN, "object"),
-				TokenFilter.removeStringLiterals());
 		return token.getChildren()[0];
 	}
 	
@@ -41,6 +36,12 @@ public class RedLexTest {
 	@Test
 	public void JSONTest() {
 		Lexer lexer = BNFParser.createLexer(getClass().getClassLoader().getResourceAsStream("json.bnf"));
+		lexer.setRetainEmpty(false);
+		lexer.setRetainStringLiterals(false);
+		lexer.setUnnamedRule(CullStrategy.LIFT_CHILDREN);
+		lexer.setRuleByName(CullStrategy.DELETE_ALL, "sep");
+		lexer.setRuleByName(CullStrategy.LIFT_CHILDREN, "object");
+		
 		Token token = lexer.tokenize("123");
 		token = cullJSON(token);
 		assertEquals("integer [123]", token.toString());

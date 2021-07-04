@@ -46,9 +46,7 @@ public class OptionalToken extends TokenType implements ParentToken {
 		if (instance == null) {
 			return new Token(this, "", 0, 0);
 		}
-		Token inst = new Token(this, str, pos, instance.length() + pos);
-		inst.setChildren(new Token[] {instance});
-		return inst;
+		return new Token(this, str, pos, instance.length() + pos, new Token[] {instance});
 	}
 	
 	@Override

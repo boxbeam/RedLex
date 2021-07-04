@@ -6,6 +6,8 @@ import redempt.redlex.data.TokenType;
 import redempt.redlex.exception.LexException;
 
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A lexer which will tokenize an input String. Best created with {@link redempt.redlex.bnf.BNFParser#createLexer(Path)}
@@ -14,6 +16,10 @@ import java.nio.file.Path;
 public class Lexer {
 
 	private TokenType root;
+	private boolean retainEmpty = false;
+	private boolean retainStringLiterals = true;
+	private CullStrategy unnamedRule = CullStrategy.IGNORE;
+	private Map<String, CullStrategy> byName = new HashMap<>();
 	
 	/**
 	 * Create a Lexer from a token. Not recommended unless you want to do everything by hand.
@@ -21,6 +27,7 @@ public class Lexer {
 	 */
 	public Lexer(TokenType root) {
 		this.root = root;
+		root.setLexer(this);
 	}
 	
 	/**
@@ -28,6 +35,19 @@ public class Lexer {
 	 */
 	public TokenType getRoot() {
 		return root;
+	}
+	
+	public CullStrategy getStrategy(Token token) {
+		if (token.length() == 0 && !retainEmpty) {
+			return CullStrategy.DELETE_ALL;
+		}
+		if (token.getType().getName() == null) {
+			return unnamedRule;
+		}
+		if (token.getType().getName().startsWith("'") && !retainStringLiterals) {
+			return CullStrategy.DELETE_ALL;
+		}
+		return byName.getOrDefault(token.getType().getName(), CullStrategy.IGNORE);
 	}
 	
 	private int[] cursorPos(String s, int pos) {
@@ -41,6 +61,41 @@ public class Lexer {
 			cpos++;
 		}
 		return new int[] {newlines, cpos};
+	}
+	
+	/**
+	 * Sets whether this Lexer will retain empty tokens
+	 * @param retainEmpty Whether this Lexer should retain empty tokens
+	 */
+	public void setRetainEmpty(boolean retainEmpty) {
+		this.retainEmpty = retainEmpty;
+	}
+	
+	/**
+	 * Sets whether this Lexer will retain string literal tokens
+	 * @param retainStringLiterals Whether this Lexer should retain string literal tokens
+	 */
+	public void setRetainStringLiterals(boolean retainStringLiterals) {
+		this.retainStringLiterals = retainStringLiterals;
+	}
+	
+	/**
+	 * Sets how this Lexer will handle unnamed tokens
+	 * @param unnamedRule What should be done with unnamed tokens
+	 */
+	public void setUnnamedRule(CullStrategy unnamedRule) {
+		this.unnamedRule = unnamedRule;
+	}
+	
+	/**
+	 * Sets how tokens with given names should be handled
+	 * @param strategy The strategy to use on the tokens with the given names
+	 * @param names The names to apply the rule to
+	 */
+	public void setRuleByName(CullStrategy strategy, String... names) {
+		for (String name : names) {
+			byName.put(name, strategy);
+		}
 	}
 	
 	/**
