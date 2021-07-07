@@ -7,10 +7,6 @@ import redempt.redlex.exception.BNFException;
 import redempt.redlex.exception.LexException;
 import redempt.redlex.processing.CullStrategy;
 import redempt.redlex.processing.Lexer;
-import redempt.redlex.processing.TokenFilter;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -51,6 +47,27 @@ public class RedLexTest {
 		token = lexer.tokenize("[[[[[[]]]]]]");
 		token = cullJSON(token);
 		assertEquals("list {list {list {list {list {list [[]]}}}}}", token.toString());
+	}
+
+	@Test
+	public void similarTokenAfterRepeatingToken() {
+		Lexer lexer = BNFParser.createLexer(getClass().getClassLoader().getResourceAsStream("a_after_repeating_ab.bnf"));
+		assertDoesNotThrow(() -> lexer.tokenize("aa"));
+		assertThrows(LexException.class, () -> lexer.tokenize("ab"));
+		assertDoesNotThrow(() -> lexer.tokenize("ababaa"));
+		assertThrows(LexException.class, () -> lexer.tokenize("bababb"));
+	}
+
+	@Test
+	public void similarTokenAfterOptionalToken() {
+		Lexer lexer = BNFParser.createLexer(getClass().getClassLoader().getResourceAsStream("a_after_optional_ab.bnf"));
+		assertDoesNotThrow(() -> lexer.tokenize("a"));
+		assertThrows(LexException.class, () -> lexer.tokenize("b"));
+		assertDoesNotThrow(() -> lexer.tokenize("aa"));
+		assertThrows(LexException.class, () -> lexer.tokenize("ab"));
+		assertDoesNotThrow(() -> lexer.tokenize("ba"));
+		assertThrows(LexException.class, () -> lexer.tokenize("aaa"));
+
 	}
 	
 }
