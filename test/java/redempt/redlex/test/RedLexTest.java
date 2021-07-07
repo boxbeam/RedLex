@@ -69,5 +69,18 @@ public class RedLexTest {
 		assertThrows(LexException.class, () -> lexer.tokenize("aaa"));
 
 	}
+
+	@Test
+	public void endOfFileRequired() {
+		Lexer lexer = BNFParser.createLexer(getClass().getClassLoader().getResourceAsStream("eof_token.bnf"));
+
+		assertDoesNotThrow(() -> lexer.tokenize("a"));
+		assertDoesNotThrow(() -> lexer.tokenize("ba"));
+		assertDoesNotThrow(() -> lexer.tokenize("bba"));
+
+		assertThrows(LexException.class, () -> lexer.tokenize("ab"));
+		assertThrows(LexException.class, () -> lexer.tokenize("aba"));
+
+	}
 	
 }
