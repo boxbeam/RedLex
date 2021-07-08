@@ -89,11 +89,7 @@ public abstract class TokenType {
 		if (!lengthMatches(offset)) {
 			return null;
 		}
-		String sub = str.substring(start, pos);
-		if (!stringMatches(sub)) {
-			return null;
-		}
-		return new Token(this, sub, 0, sub.length());
+		return new Token(this, str, start, pos);
 	}
 	
 	public String getMessage() {
