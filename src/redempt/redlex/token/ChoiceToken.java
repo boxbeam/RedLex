@@ -32,16 +32,6 @@ public class ChoiceToken extends TokenType implements ParentToken {
 	}
 	
 	@Override
-	public boolean stringMatches(String input) {
-		for (TokenType child : children) {
-			if (child.stringMatches(input)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	@Override
 	public Token findForward(String str, int pos, LexContext ctx) {
 		ctx.update(pos, this);
 		for (TokenType child : children) {

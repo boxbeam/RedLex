@@ -35,11 +35,6 @@ public class OptionalToken extends TokenType implements ParentToken {
 	}
 	
 	@Override
-	public boolean stringMatches(String input) {
-		return input.length() == 0 || token.stringMatches(input);
-	}
-	
-	@Override
 	public Token findForward(String str, int pos, LexContext ctx) {
 		ctx.update(pos, this);
 		Token instance = token.findForward(str, pos, ctx);

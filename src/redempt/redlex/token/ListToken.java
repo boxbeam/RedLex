@@ -36,19 +36,6 @@ public class ListToken extends TokenType implements ParentToken {
 	}
 	
 	@Override
-	public boolean stringMatches(String input) {
-		int pos = 0;
-		for (TokenType child : children) {
-			Token inst = child.findForward(input, pos, new LexContext(pos));
-			if (inst == null) {
-				return false;
-			}
-			pos += inst.length();
-		}
-		return pos == input.length();
-	}
-	
-	@Override
 	public Token findForward(String str, int pos, LexContext ctx) {
 		if (!ctx.update(pos, this)) {
 			return null;

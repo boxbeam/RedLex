@@ -16,11 +16,6 @@ public class EndOfFileToken extends TokenType {
 	}
 	
 	@Override
-	public boolean stringMatches(String input) {
-		return false;
-	}
-	
-	@Override
 	public Token findForward(String str, int pos, LexContext ctx) {
 		return pos == str.length() ? new Token(this, "", 0, 0) : null;
 	}

@@ -14,11 +14,6 @@ public class PlaceholderToken extends TokenType {
 	}
 	
 	@Override
-	public boolean stringMatches(String input) {
-		return false;
-	}
-	
-	@Override
 	public boolean lengthMatches(int length) {
 		return false;
 	}

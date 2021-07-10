@@ -28,11 +28,6 @@ public class CharSetToken extends TokenType {
 	}
 	
 	@Override
-	public boolean stringMatches(String input) {
-		return input.length() == 1 && (inverted ^ chars.contains(input.charAt(0)));
-	}
-	
-	@Override
 	public boolean lengthMatches(int length) {
 		return length == 1;
 	}

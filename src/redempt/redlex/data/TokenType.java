@@ -132,7 +132,6 @@ public abstract class TokenType {
 	}
 	
 	public abstract boolean characterMatches(String input, int pos, int offset);
-	public abstract boolean stringMatches(String input);
 	public abstract boolean lengthMatches(int length);
 	public abstract int minLength();
 	public abstract int maxLength();

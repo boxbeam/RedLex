@@ -20,11 +20,6 @@ public class NotToken extends TokenType implements ParentToken {
 	}
 	
 	@Override
-	public boolean stringMatches(String input) {
-		return !token.stringMatches(input);
-	}
-	
-	@Override
 	public Token findForward(String str, int pos, LexContext ctx) {
 		ctx.update(pos, this);
 		Token inst = token.findForward(str, pos, new LexContext());

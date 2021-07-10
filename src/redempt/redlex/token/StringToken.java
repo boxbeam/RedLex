@@ -17,11 +17,6 @@ public class StringToken extends TokenType {
 	}
 	
 	@Override
-	public boolean stringMatches(String input) {
-		return input.equals(string);
-	}
-	
-	@Override
 	public boolean lengthMatches(int length) {
 		return length == string.length();
 	}

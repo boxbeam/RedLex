@@ -23,25 +23,6 @@ public class RepeatingToken extends TokenType implements ParentToken {
 	}
 	
 	@Override
-	public boolean stringMatches(String input) {
-		if (input.length() == 0) {
-			return token.findForward(input, 0, new LexContext()) != null;
-		}
-		int pos = 0;
-		while (pos < input.length()) {
-			Token inst = token.findForward(input, pos, new LexContext(pos));
-			if (inst == null) {
-				return false;
-			}
-			pos += inst.getValue().length();
-			if (pos == 0) {
-				break;
-			}
-		}
-		return true;
-	}
-	
-	@Override
 	public Token findForward(String str, int pos, LexContext ctx) {
 		ctx.update(pos, this);
 		List<Token> list = new ArrayList<>();

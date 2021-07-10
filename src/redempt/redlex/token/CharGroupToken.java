@@ -26,15 +26,6 @@ public class CharGroupToken extends TokenType {
 	}
 	
 	@Override
-	public boolean stringMatches(String input) {
-		if (input.length() != 1) {
-			return false;
-		}
-		char c = input.charAt(0);
-		return inverted ^ (c >= min && c <= max);
-	}
-	
-	@Override
 	public boolean lengthMatches(int length) {
 		return length == 1;
 	}
