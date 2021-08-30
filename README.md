@@ -1,6 +1,8 @@
 # RedLex
 A flexible general-purpose lexer for any format which makes data easy to process.
 
+Support Discord: https://discord.gg/agu5xGy2YZ
+
 # Installation for Development
 
 RedLex can be accessed via JitPack using Gradle or Maven. Read the section for whichever you use below.
