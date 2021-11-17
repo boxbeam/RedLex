@@ -80,7 +80,6 @@ public class RedLexTest {
 
 		assertThrows(LexException.class, () -> lexer.tokenize("ab"));
 		assertThrows(LexException.class, () -> lexer.tokenize("aba"));
-
 	}
 	
 }

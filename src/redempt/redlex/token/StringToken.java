@@ -21,6 +21,10 @@ public class StringToken extends TokenType {
 		return length == string.length();
 	}
 	
+	public String getString() {
+		return string;
+	}
+	
 	@Override
 	public int minLength() {
 		return string.length();
