@@ -81,5 +81,17 @@ public class RedLexTest {
 		assertThrows(LexException.class, () -> lexer.tokenize("ab"));
 		assertThrows(LexException.class, () -> lexer.tokenize("aba"));
 	}
+
+	@Test
+	public void parenTest() {
+		Lexer lexer = BNFParser.createLexer(getClass().getClassLoader().getResourceAsStream("parens.bnf"));
+		
+		assertDoesNotThrow(() -> lexer.tokenize(""));
+		assertDoesNotThrow(() -> lexer.tokenize("()()()"));
+		assertDoesNotThrow(() -> lexer.tokenize("()()(()())"));
+		assertThrows(LexException.class, () -> lexer.tokenize(")("));
+		assertThrows(LexException.class, () -> lexer.tokenize("())(()"));
+		assertThrows(LexException.class, () -> lexer.tokenize("(()()("));
+	}
 	
 }
