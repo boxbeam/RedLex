@@ -11,10 +11,18 @@ import java.util.List;
 public class RepeatingToken extends TokenType implements ParentToken {
 	
 	private TokenType token;
+	private int minMatches;
+	private int maxMatches;
 	
-	public RepeatingToken(String name, TokenType token) {
+	public RepeatingToken(String name, TokenType token, int minMatches, int maxMatches) {
 		super(name);
 		this.token = token;
+		this.minMatches = minMatches;
+		this.maxMatches = maxMatches;
+	}
+	
+	public RepeatingToken(String name, TokenType token) {
+		this(name, token, 1, Integer.MAX_VALUE);
 	}
 	
 	@Override
@@ -27,7 +35,7 @@ public class RepeatingToken extends TokenType implements ParentToken {
 		ctx.update(pos, this);
 		List<Token> list = new ArrayList<>();
 		int start = pos;
-		while (pos < str.length()) {
+		while (pos < str.length() && list.size() < maxMatches) {
 			Token inst = token.findForward(str, pos, ctx);
 			if (inst == null) {
 				break;
@@ -38,7 +46,7 @@ public class RepeatingToken extends TokenType implements ParentToken {
 				break;
 			}
 		}
-		if (list.size() > 0) {
+		if (list.size() >= minMatches) {
 			return new Token(this, str, start, pos, list.toArray(Token.EMPTY));
 		}
 		return null;

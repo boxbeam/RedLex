@@ -94,4 +94,17 @@ public class RedLexTest {
 		assertThrows(LexException.class, () -> lexer.tokenize("(()()("));
 	}
 	
+	@Test
+	public void quantifierTest() {
+		Lexer lexer = BNFParser.createLexer("root ::= [0-9]{3,16}");
+		
+		assertDoesNotThrow(() -> lexer.tokenize("123456"));
+		assertThrows(LexException.class, () -> lexer.tokenize("12"));
+		
+		Lexer lexer2 = BNFParser.createLexer("root ::= [0-9]{,16}");
+		
+		assertDoesNotThrow(() -> lexer2.tokenize("12"));
+		assertThrows(LexException.class, () -> lexer2.tokenize("12345678901234567"));
+	}
+	
 }

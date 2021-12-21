@@ -36,7 +36,8 @@ public class BNFParser {
 		 lexer.setUnnamedRule(CullStrategy.DELETE_ALL);
 		 lexer.setRetainEmpty(false);
 		 lexer.setRuleByName(CullStrategy.DELETE_ALL, "whitespace", "::=", "comment", "validChar");
-		 lexer.setRuleByName(CullStrategy.LIFT_CHILDREN, "modifiers", "statementList", "tokenOrNested", "tokenOrStatement", "tokenBase", "sentencesRep", "separator");
+		 lexer.setRuleByName(CullStrategy.LIFT_CHILDREN, "modifiers", "statementList", "tokenOrNested",
+				 "tokenOrStatement", "tokenBase", "sentencesRep", "separator", "modifierChoice");
 	}
 	
 	/**
@@ -102,7 +103,6 @@ public class BNFParser {
 			}
 		}
 		for (Token statementOpt : map.get("statementOpt")) {
-			statementOpt.getChildren()[0].liftChildren();
 			statementOpt.liftChildren();
 		}
 		Map<String, TokenType> tokens = new HashMap<>();
@@ -165,20 +165,34 @@ public class BNFParser {
 	}
 	
 	private static TokenType processModifier(TokenType type, Token modifier) {
-		if (modifier != null) {
-			switch (modifier.getValue().charAt(0)) {
-				case '+':
-					type = new RepeatingToken(null, type);
-					break;
-				case '*':
-					type = new OptionalToken(null, new RepeatingToken(null, type));
-					break;
-				case '?':
-					type = new OptionalToken(null, type);
-					break;
-			}
+		if (modifier == null) {
+			return type;
+		}
+		switch (modifier.getValue().charAt(0)) {
+			case '+':
+				type = new RepeatingToken(null, type);
+				break;
+			case '*':
+				type = new RepeatingToken(null, type, 0, Integer.MAX_VALUE);
+				break;
+			case '?':
+				type = new OptionalToken(null, type);
+				break;
+			case '{':
+				int[] times = parseQuantifier(modifier.getValue());
+				type = new RepeatingToken(null, type, times[0], times[1]);
+				break;
 		}
 		return type;
+	}
+	
+	private static int[] parseQuantifier(String quantifier) {
+		int commaIndex = quantifier.indexOf(',');
+		String before = quantifier.substring(1, commaIndex);
+		String after = quantifier.substring(commaIndex + 1, quantifier.length() - 1);
+		int min = before.length() == 0 ? 0 : Integer.parseInt(before);
+		int max = after.length() == 0 ? Integer.MAX_VALUE : Integer.parseInt(after);
+		return new int[] {min, max};
 	}
 	
 	private static TokenType processSentence(Token sentence) {

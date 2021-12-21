@@ -28,17 +28,19 @@ class BNFLexer {
 	private static TokenType newline = new StringToken("whitespace", "\n");
 	private static TokenType newlineRep = new RepeatingToken("whitespace", newline);
 	private static TokenType sep = new RepeatingToken("whitespace", whitespace);
-	private static TokenType opsep = new OptionalToken("whitespace", sep);
+	private static TokenType opsep = new RepeatingToken("whitespace", whitespace, 0, Integer.MAX_VALUE);
 	private static TokenType lowerAlpha = new CharGroupToken(null, 'a', 'z');
 	private static TokenType upperAlpha = new CharGroupToken(null, 'A', 'Z');
 	private static TokenType digit = new CharGroupToken(null, '0', '9');
+	private static TokenType number = new RepeatingToken("number", digit);
 	private static TokenType underscore = new StringToken("_", "_");
 	private static TokenType validChar = new ChoiceToken("validChar", lowerAlpha, upperAlpha, digit, underscore);
 	private static TokenType word = new RepeatingToken("word", validChar);
 	private static TokenType equals = new StringToken("::=", "::=");
-	private static TokenType eof = new EndOfFileToken("<eof>");
 	private static TokenType eofToken = new StringToken("eof", "<eof>");
-	private static TokenType modifier = new CharSetToken("modifier", '+', '?', '*');
+	private static TokenType quantifier = quantifierType();
+	private static TokenType basicModifier = new CharSetToken("modifier", '+', '?', '*');
+	private static TokenType modifier = new ChoiceToken("modifierChoice", quantifier, basicModifier);
 	private static TokenType modifierToken = new OptionalToken("modifiers", modifier);
 	private static TokenType notToken = new StringToken("!", "!");
 	private static TokenType notOpt = new OptionalToken("!", notToken);
@@ -46,7 +48,6 @@ class BNFLexer {
 	private static TokenType statement = statementType();
 	private static TokenType sentence = new ListToken("sentence", opsep, word, sep, equals, sep, statement);
 	private static TokenType comment = commentType();
-	private static TokenType root = rootType();
 	
 	private static TokenType stringType() {
 		TokenType notQuote = new CharGroupToken("notQuote", '"', '"', true);
@@ -69,8 +70,7 @@ class BNFLexer {
 	private static TokenType charSetType() {
 		TokenType notBracket = new CharSetToken("notBracket", true, '[', ']');
 		TokenType setChar = new ChoiceToken("setChar", escapeSequence, notBracket);
-		TokenType setRep = new RepeatingToken("setRep", setChar);
-		TokenType setOpt = new OptionalToken("setOpt", setRep);
+		TokenType setOpt = new RepeatingToken("setOpt", setChar, 0, Integer.MAX_VALUE);
 		TokenType charSet = new ListToken("charset", obrack, optionalCaret, setOpt, cbrack);
 		return charSet;
 	}
@@ -81,6 +81,15 @@ class BNFLexer {
 		TokenType dash = new StringToken("-", "-");
 		TokenType charSet = new ListToken("chargroup", obrack, optionalCaret, setChar, dash, setChar, cbrack);
 		return charSet;
+	}
+	
+	private static TokenType quantifierType() {
+		TokenType ocbrack = new StringToken("{", "{");
+		TokenType ccbrack = new StringToken("}", "}");
+		TokenType comma = new StringToken(",", ",");
+		TokenType numberOpt = new OptionalToken("number", number);
+		TokenType quantifier = new ListToken("modifier", ocbrack, opsep, numberOpt, opsep, comma, opsep, numberOpt, opsep, ccbrack);
+		return quantifier;
 	}
 	
 	private static TokenType tokenType() {
@@ -97,10 +106,9 @@ class BNFLexer {
 		TokenType separatorChoice = new ChoiceToken("separator", barSepOpt, sep);
 		TokenType tokenOrStatement = new ChoiceToken("tokenOrStatement", token, statement, nested);
 		TokenType restList = new ListToken("statementList", separatorChoice, tokenOrStatement);
-		TokenType restRep = new RepeatingToken("statementRest", restList);
-		TokenType restOpt = new OptionalToken("statementOpt", restRep);
+		TokenType restRep = new RepeatingToken("statementOpt", restList, 0, Integer.MAX_VALUE);
 		TokenType tokenOrNestedStatement = new ChoiceToken("tokenOrNested", token, nested);
-		TokenType statement = new ListToken("statement", tokenOrNestedStatement, restOpt);
+		TokenType statement = new ListToken("statement", tokenOrNestedStatement, restRep);
 		Map<String, TokenType> map = new HashMap<>();
 		map.put("statement", statement);
 		statement.replacePlaceholders(map);
