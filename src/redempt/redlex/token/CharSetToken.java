@@ -2,8 +2,7 @@ package redempt.redlex.token;
 
 import redempt.redlex.data.TokenType;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class CharSetToken extends TokenType {
 
@@ -41,5 +40,24 @@ public class CharSetToken extends TokenType {
 	public int maxLength() {
 		return 1;
 	}
-	
+
+	@Override
+	protected List<Character> calcFirstCharacters() {
+		return inverted ? Collections.singletonList(null) : new ArrayList<>(chars);
+	}
+
+	@Override
+	public int hashCode() {
+		return chars.hashCode() + (inverted ? 1 : 0);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof CharSetToken)) {
+			return false;
+		}
+		CharSetToken token = (CharSetToken) o;
+		return token.chars.equals(chars) && token.inverted == inverted;
+	}
+
 }

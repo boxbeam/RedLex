@@ -5,6 +5,9 @@ import redempt.redlex.data.LexContext;
 import redempt.redlex.data.Token;
 import redempt.redlex.data.TokenType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class StringChoiceToken extends TokenType {
 
 	private CharTree tree = new CharTree();
@@ -49,5 +52,10 @@ public class StringChoiceToken extends TokenType {
 	public int maxLength() {
 		return max;
 	}
-	
+
+	@Override
+	protected List<Character> calcFirstCharacters() {
+		return new ArrayList<>(tree.getFirstChars());
+	}
+
 }

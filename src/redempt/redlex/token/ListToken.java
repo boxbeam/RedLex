@@ -5,6 +5,11 @@ import redempt.redlex.data.ParentToken;
 import redempt.redlex.data.Token;
 import redempt.redlex.data.TokenType;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 public class ListToken extends TokenType implements ParentToken {
 	
 	private TokenType[] children;
@@ -71,7 +76,20 @@ public class ListToken extends TokenType implements ParentToken {
 		initLength();
 		return maxLength;
 	}
-	
+
+	@Override
+	protected List<Character> calcFirstCharacters() {
+		Set<Character> chars = new HashSet<>();
+		int i = 0;
+		for (; i < children.length && children[i].minLength() == 0; i++) {
+			chars.addAll(children[i].getFirstCharacters());
+		}
+		if (i < children.length) {
+			chars.addAll(children[i].getFirstCharacters());
+		}
+		return new ArrayList<>(chars);
+	}
+
 	@Override
 	public TokenType[] getChildren() {
 		return children;

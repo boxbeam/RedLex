@@ -5,6 +5,9 @@ import redempt.redlex.data.ParentToken;
 import redempt.redlex.data.Token;
 import redempt.redlex.data.TokenType;
 
+import java.util.Collections;
+import java.util.List;
+
 public class NotToken extends TokenType implements ParentToken {
 	
 	private TokenType token;
@@ -43,7 +46,12 @@ public class NotToken extends TokenType implements ParentToken {
 	public int maxLength() {
 		return token.maxLength();
 	}
-	
+
+	@Override
+	protected List<Character> calcFirstCharacters() {
+		return Collections.singletonList(null);
+	}
+
 	@Override
 	public String getMessage() {
 		return "Unexpected";

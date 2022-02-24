@@ -2,6 +2,9 @@ package redempt.redlex.token;
 
 import redempt.redlex.data.TokenType;
 
+import java.util.Collections;
+import java.util.List;
+
 public class StringToken extends TokenType {
 	
 	private String string;
@@ -34,5 +37,24 @@ public class StringToken extends TokenType {
 	public int maxLength() {
 		return string.length();
 	}
-	
+
+	@Override
+	public List<Character> calcFirstCharacters() {
+		return Collections.singletonList(string.length() == 0 ? null : string.charAt(0));
+	}
+
+	@Override
+	public int hashCode() {
+		return string.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof StringToken)) {
+			return false;
+		}
+		StringToken token = (StringToken) o;
+		return token.string.equals(string);
+	}
+
 }

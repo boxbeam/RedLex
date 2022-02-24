@@ -4,6 +4,9 @@ import redempt.redlex.data.LexContext;
 import redempt.redlex.data.Token;
 import redempt.redlex.data.TokenType;
 
+import java.util.Collections;
+import java.util.List;
+
 public class EndOfFileToken extends TokenType {
 	
 	public EndOfFileToken(String name) {
@@ -34,5 +37,10 @@ public class EndOfFileToken extends TokenType {
 	public int maxLength() {
 		return 0;
 	}
-	
+
+	@Override
+	protected List<Character> calcFirstCharacters() {
+		return Collections.singletonList(null);
+	}
+
 }

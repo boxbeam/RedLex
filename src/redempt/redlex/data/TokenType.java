@@ -3,18 +3,19 @@ package redempt.redlex.data;
 import redempt.redlex.processing.Lexer;
 import redempt.redlex.token.PlaceholderToken;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
  * Represents a type of token which can be used to create a Lexer
  */
 public abstract class TokenType {
-	
+
+	private static final Map<TokenType, List<Character>> firstChars = new WeakHashMap<>();
+
 	private String name;
 	private Lexer lexer;
+	private List<Character> firstCharacters;
 	
 	/**
 	 * Create a new TokenType with the given name
@@ -135,6 +136,20 @@ public abstract class TokenType {
 	public abstract boolean lengthMatches(int length);
 	public abstract int minLength();
 	public abstract int maxLength();
+	protected abstract List<Character> calcFirstCharacters();
+
+	/**
+	 * @return A list of all the characters which may appear as the first character of this token. Includes null if this token may be zero-length.
+	 */
+	public List<Character> getFirstCharacters() {
+		if (firstCharacters == null) {
+			if (!firstChars.containsKey(this)) {
+				firstChars.put(this, calcFirstCharacters());
+			}
+			firstCharacters = firstChars.get(this);
+		}
+		return firstCharacters;
+	}
 	
 	@Override
 	public String toString() {

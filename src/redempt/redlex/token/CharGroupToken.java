@@ -2,6 +2,11 @@ package redempt.redlex.token;
 
 import redempt.redlex.data.TokenType;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+
 public class CharGroupToken extends TokenType {
 	
 	private int min;
@@ -39,5 +44,31 @@ public class CharGroupToken extends TokenType {
 	public int maxLength() {
 		return 1;
 	}
-	
+
+	@Override
+	protected List<Character> calcFirstCharacters() {
+		if (inverted) {
+			return Collections.singletonList(null);
+		}
+		List<Character> list = new ArrayList<>();
+		for (int i = min; i < max; i++) {
+			list.add((char) i);
+		}
+		return list;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(min, max, inverted);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof CharGroupToken)) {
+			return false;
+		}
+		CharGroupToken token = (CharGroupToken) o;
+		return token.inverted == inverted && token.min == min && token.max == max;
+	}
+
 }

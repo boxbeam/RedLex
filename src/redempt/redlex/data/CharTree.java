@@ -2,6 +2,7 @@ package redempt.redlex.data;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class CharTree {
 	
@@ -31,10 +32,14 @@ public class CharTree {
 		}
 		return max;
 	}
-	
+
+	public Set<Character> getFirstChars() {
+		return root.children.keySet();
+	}
+
 	private static class Node {
 		
-		private Map<Character, Node> children;
+		public Map<Character, Node> children;
 		private boolean mapped = false;
 		
 		public Node getChild(char c) {

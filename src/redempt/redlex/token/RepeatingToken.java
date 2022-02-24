@@ -6,7 +6,9 @@ import redempt.redlex.data.Token;
 import redempt.redlex.data.TokenType;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class RepeatingToken extends TokenType implements ParentToken {
 	
@@ -69,7 +71,17 @@ public class RepeatingToken extends TokenType implements ParentToken {
 	public int maxLength() {
 		return Integer.MAX_VALUE;
 	}
-	
+
+	@Override
+	protected List<Character> calcFirstCharacters() {
+		Set<Character> chars = new HashSet<>();
+		if (minMatches == 0) {
+			chars.add(null);
+		}
+		chars.addAll(token.getFirstCharacters());
+		return new ArrayList<>(chars);
+	}
+
 	@Override
 	public TokenType[] getChildren() {
 		return new TokenType[] {token};
