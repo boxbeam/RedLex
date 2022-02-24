@@ -188,6 +188,10 @@ public class BNFParser {
 	
 	private static int[] parseQuantifier(String quantifier) {
 		int commaIndex = quantifier.indexOf(',');
+		if (commaIndex == -1) {
+			int num = Integer.parseInt(quantifier.substring(1, quantifier.length() - 1));
+			return new int[] {num, num};
+		}
 		String before = quantifier.substring(1, commaIndex);
 		String after = quantifier.substring(commaIndex + 1, quantifier.length() - 1);
 		int min = before.length() == 0 ? 0 : Integer.parseInt(before);

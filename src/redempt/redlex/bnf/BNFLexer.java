@@ -86,8 +86,9 @@ class BNFLexer {
 		TokenType ocbrack = new StringToken("{", "{");
 		TokenType ccbrack = new StringToken("}", "}");
 		TokenType comma = new StringToken(",", ",");
+		TokenType commaOpt = new RepeatingToken(",", comma, 0, 1);
 		TokenType numberOpt = new RepeatingToken("number", number, 0, 1);
-		TokenType quantifier = new ListToken("modifier", ocbrack, opsep, numberOpt, opsep, comma, opsep, numberOpt, opsep, ccbrack);
+		TokenType quantifier = new ListToken("modifier", ocbrack, opsep, numberOpt, opsep, commaOpt, opsep, numberOpt, opsep, ccbrack);
 		return quantifier;
 	}
 	
