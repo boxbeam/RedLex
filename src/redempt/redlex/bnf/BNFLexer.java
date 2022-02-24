@@ -21,7 +21,7 @@ class BNFLexer {
 	private static TokenType obrack = new StringToken("[", "[");
 	private static TokenType oparen = new StringToken(null, "(");
 	private static TokenType caret = new StringToken("^", "^");
-	private static TokenType optionalCaret = new OptionalToken("^", caret);
+	private static TokenType optionalCaret = new RepeatingToken("^", caret, 0, 1);
 	private static TokenType cbrack = new StringToken("]", "]");
 	private static TokenType cparen = new StringToken(null, ")");
 	private static TokenType whitespace = new CharSetToken("whitespace", ' ', '\t', '\r');
@@ -41,9 +41,9 @@ class BNFLexer {
 	private static TokenType quantifier = quantifierType();
 	private static TokenType basicModifier = new CharSetToken("modifier", '+', '?', '*');
 	private static TokenType modifier = new ChoiceToken("modifierChoice", quantifier, basicModifier);
-	private static TokenType modifierToken = new OptionalToken("modifiers", modifier);
+	private static TokenType modifierToken = new RepeatingToken("modifiers", modifier, 0, 1);
 	private static TokenType notToken = new StringToken("!", "!");
-	private static TokenType notOpt = new OptionalToken("!", notToken);
+	private static TokenType notOpt = new RepeatingToken("!", notToken, 0, 1);
 	private static TokenType token = tokenType();
 	private static TokenType statement = statementType();
 	private static TokenType sentence = new ListToken("sentence", opsep, word, sep, equals, sep, statement);
@@ -53,7 +53,7 @@ class BNFLexer {
 		TokenType notQuote = new CharGroupToken("notQuote", '"', '"', true);
 		TokenType stringChar = new ChoiceToken("strChar", escapeSequence, notQuote);
 		TokenType stringRep = new RepeatingToken("strRep", stringChar);
-		TokenType stringOpt = new OptionalToken("strOpt", stringRep);
+		TokenType stringOpt = new RepeatingToken("strOpt", stringRep, 0, 1);
 		TokenType quote = new StringToken("quote", "\"");
 		TokenType string = new ListToken("string", quote, stringOpt, quote);
 		return string;
@@ -61,9 +61,8 @@ class BNFLexer {
 	
 	private static TokenType commentType() {
 		TokenType notNewline = new CharSetToken("notNewline", true, '\n');
-		TokenType notNewlineRep = new RepeatingToken("comment", notNewline);
-		TokenType notNewlineOpt = new OptionalToken("comment", notNewlineRep);
-		TokenType comment = new ListToken("comment", opsep, commentPrefix, notNewlineOpt);
+		TokenType notNewlineRep = new RepeatingToken("comment", notNewline, 0, Integer.MAX_VALUE);
+		TokenType comment = new ListToken("comment", opsep, commentPrefix, notNewlineRep);
 		return comment;
 	}
 	
@@ -87,7 +86,7 @@ class BNFLexer {
 		TokenType ocbrack = new StringToken("{", "{");
 		TokenType ccbrack = new StringToken("}", "}");
 		TokenType comma = new StringToken(",", ",");
-		TokenType numberOpt = new OptionalToken("number", number);
+		TokenType numberOpt = new RepeatingToken("number", number, 0, 1);
 		TokenType quantifier = new ListToken("modifier", ocbrack, opsep, numberOpt, opsep, comma, opsep, numberOpt, opsep, ccbrack);
 		return quantifier;
 	}

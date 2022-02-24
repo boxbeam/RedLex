@@ -176,7 +176,7 @@ public class BNFParser {
 				type = new RepeatingToken(null, type, 0, Integer.MAX_VALUE);
 				break;
 			case '?':
-				type = new OptionalToken(null, type);
+				type = new RepeatingToken(null, type, 0, 1);
 				break;
 			case '{':
 				int[] times = parseQuantifier(modifier.getValue());
