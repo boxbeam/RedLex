@@ -144,6 +144,7 @@ public abstract class TokenType {
 	public List<Character> getFirstCharacters() {
 		if (firstCharacters == null) {
 			if (!firstChars.containsKey(this)) {
+				firstChars.put(this, Collections.emptyList());
 				firstChars.put(this, calcFirstCharacters());
 			}
 			firstCharacters = firstChars.get(this);
