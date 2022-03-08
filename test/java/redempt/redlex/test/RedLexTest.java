@@ -111,4 +111,13 @@ public class RedLexTest {
 		assertThrows(LexException.class, () -> lexer3.tokenize("aa"));
 	}
 	
+	@Test
+	public void caseInsensitiveTest() {
+		Lexer lexer = BNFParser.createLexer("root ::= i\"abc\"");
+		assertDoesNotThrow(() -> lexer.tokenize("abc"));
+		assertDoesNotThrow(() -> lexer.tokenize("aBc"));
+		assertDoesNotThrow(() -> lexer.tokenize("Abc"));
+		assertDoesNotThrow(() -> lexer.tokenize("ABC"));
+	}
+	
 }

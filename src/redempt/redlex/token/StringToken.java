@@ -4,18 +4,35 @@ import redempt.redlex.data.TokenType;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 public class StringToken extends TokenType {
 	
 	private String string;
+	private boolean caseSensitive;
 	
 	public StringToken(String name, String string) {
+		this(name, string, true);
+	}
+	
+	public StringToken(String name, String string, boolean caseSensitive) {
 		super(name);
 		this.string = string;
+		this.caseSensitive = caseSensitive;
+		if (!caseSensitive) {
+			this.string = this.string.toLowerCase(Locale.ROOT);
+		}
+	}
+	
+	public boolean isCaseSensitive() {
+		return caseSensitive;
 	}
 	
 	@Override
 	public boolean characterMatches(String input, int pos, int offset) {
+		if (!caseSensitive) {
+			return Character.toLowerCase(input.charAt(pos)) == string.charAt(offset);
+		}
 		return input.charAt(pos) == string.charAt(offset);
 	}
 	

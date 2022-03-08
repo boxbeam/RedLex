@@ -50,12 +50,13 @@ class BNFLexer {
 	private static TokenType comment = commentType();
 	
 	private static TokenType stringType() {
+		TokenType optI = new RepeatingToken("insensitive", new StringToken(null, "i"), 0, 1);
 		TokenType notQuote = new CharGroupToken("notQuote", '"', '"', true);
 		TokenType stringChar = new ChoiceToken("strChar", escapeSequence, notQuote);
 		TokenType stringRep = new RepeatingToken("strRep", stringChar);
 		TokenType stringOpt = new RepeatingToken("strOpt", stringRep, 0, 1);
 		TokenType quote = new StringToken("quote", "\"");
-		TokenType string = new ListToken("string", quote, stringOpt, quote);
+		TokenType string = new ListToken("string", optI, quote, stringOpt, quote);
 		return string;
 	}
 	

@@ -140,7 +140,7 @@ public class BNFParser {
 		TokenType type = null;
 		switch (token.getType().getName()) {
 			case "string":
-				type = createString(token.firstByName("strOpt"));
+				type = createString(token.firstByName("strOpt"), token.firstByName("insensitive") == null);
 				break;
 			case "charset":
 				type = createCharset(token);
@@ -233,18 +233,18 @@ public class BNFParser {
 		if (merged.size() == 1) {
 			return merged.get(0);
 		}
-		if (merged.size() >= 3 && merged.stream().allMatch(t -> t instanceof StringToken)) {
+		if (merged.size() >= 3 && merged.stream().allMatch(t -> t instanceof StringToken && ((StringToken) t).isCaseSensitive())) {
 			return new StringChoiceToken(null, merged.stream().map(StringToken.class::cast).map(StringToken::getString).toArray(String[]::new));
 		}
 		return new ChoiceToken(null, merged.toArray(new TokenType[merged.size()]));
 	}
 	
-	private static TokenType createString(Token strOpt) {
+	private static TokenType createString(Token strOpt, boolean caseSensitive) {
 		if (strOpt == null) {
 			return new StringToken(null, "");
 		}
 		String val = strOpt.joinLeaves("");
-		return new StringToken("'" + val, strOpt.joinLeaves(""));
+		return new StringToken("'" + val, strOpt.joinLeaves(""), caseSensitive);
 	}
 	
 	private static TokenType createTokenReference(Token t) {
