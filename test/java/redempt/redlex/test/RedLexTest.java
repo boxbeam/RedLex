@@ -118,6 +118,12 @@ public class RedLexTest {
 		assertDoesNotThrow(() -> lexer.tokenize("aBc"));
 		assertDoesNotThrow(() -> lexer.tokenize("Abc"));
 		assertDoesNotThrow(() -> lexer.tokenize("ABC"));
+		
+		Lexer lexer2 = BNFParser.createLexer("root ::= \"abc\"");
+		assertDoesNotThrow(() -> lexer2.tokenize("abc"));
+		assertThrows(LexException.class, () -> lexer2.tokenize("Abc"));
+		assertThrows(LexException.class, () -> lexer2.tokenize("aBc"));
+		assertThrows(LexException.class, () -> lexer2.tokenize("aBC"));
 	}
 	
 }

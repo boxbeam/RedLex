@@ -2,6 +2,7 @@ package redempt.redlex.token;
 
 import redempt.redlex.data.TokenType;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -57,6 +58,12 @@ public class StringToken extends TokenType {
 
 	@Override
 	public List<Character> calcFirstCharacters() {
+		if (!caseSensitive && string.length() > 0) {
+			List<Character> chars = new ArrayList<>();
+			chars.add(string.charAt(0));
+			chars.add(Character.toUpperCase(string.charAt(0)));
+			return chars;
+		}
 		return Collections.singletonList(string.length() == 0 ? null : string.charAt(0));
 	}
 
