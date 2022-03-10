@@ -1,5 +1,5 @@
 # RedLex
-A flexible general-purpose lexer for any format which makes data easy to process.
+A flexible lexer generator library which can generate abstract syntax trees for any context-free format.
 
 Support Discord: https://discord.gg/agu5xGy2YZ
 
