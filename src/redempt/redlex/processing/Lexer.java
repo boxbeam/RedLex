@@ -101,7 +101,7 @@ public class Lexer {
 	/**
 	 * Tokenizes an input String
 	 * @param str The string to tokenize
-	 * @param errorOnFail Whether to throw a LexException on failure
+	 * @param errorOnFail Whether to throw a LexException on failure, returns null if false
 	 * @return The root Token of the tokenized tree
 	 */
 	public Token tokenize(String str, boolean errorOnFail) {

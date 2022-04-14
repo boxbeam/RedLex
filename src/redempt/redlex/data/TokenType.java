@@ -14,6 +14,7 @@ public abstract class TokenType {
 	private static final Map<TokenType, List<Character>> firstChars = new WeakHashMap<>();
 
 	private String name;
+	private int id;
 	private Lexer lexer;
 	private List<Character> firstCharacters;
 	
@@ -23,6 +24,13 @@ public abstract class TokenType {
 	 */
 	public TokenType(String name) {
 		this.name = name;
+	}
+	
+	/**
+	 * @return The numeric ID of this TokenType
+	 */
+	public int getId() {
+		return id;
 	}
 	
 	/**
@@ -98,7 +106,9 @@ public abstract class TokenType {
 	}
 	
 	public void replacePlaceholders(Map<String, TokenType> tokens) {
+		int[] counter = {0};
 		walk(t -> {
+			t.id = counter[0]++;
 			if (!(t instanceof ParentToken)) {
 				return;
 			}
@@ -154,7 +164,7 @@ public abstract class TokenType {
 	
 	@Override
 	public String toString() {
-		return name == null ? "(unnamed token)" : name;
+		return name == null ? "(unnamed token " + id + ")" : name + " " + id;
 	}
 	
 }
