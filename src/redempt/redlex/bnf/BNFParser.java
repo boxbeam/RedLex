@@ -32,16 +32,17 @@ public class BNFParser {
 	private static Lexer lexer;
 	
 	static {
-		 lexer = BNFLexer.getLexer();
-		 lexer.setUnnamedRule(CullStrategy.DELETE_ALL);
-		 lexer.setRetainEmpty(false);
-		 lexer.setRuleByName(CullStrategy.DELETE_ALL, "whitespace", "::=", "comment", "validChar");
-		 lexer.setRuleByName(CullStrategy.LIFT_CHILDREN, "modifiers", "statementList", "tokenOrNested",
-				 "tokenOrStatement", "tokenBase", "sentencesRep", "separator", "modifierChoice");
+		lexer = BNFLexer.getLexer();
+		lexer.setUnnamedRule(CullStrategy.DELETE_ALL);
+		lexer.setRetainEmpty(false);
+		lexer.setRuleByName(CullStrategy.DELETE_ALL, "whitespace", "::=", "comment", "validChar");
+		lexer.setRuleByName(CullStrategy.LIFT_CHILDREN, "modifiers", "statementList", "tokenOrNested",
+				"tokenOrStatement", "tokenBase", "sentencesRep", "separator", "modifierChoice");
 	}
 	
 	/**
 	 * Parses the input String and returns a Lexer
+	 *
 	 * @param input The input String defining the format for the Lexer
 	 * @return A Lexer for the given format
 	 */
@@ -51,6 +52,7 @@ public class BNFParser {
 	
 	/**
 	 * Parses the input String and returns a Lexer
+	 *
 	 * @param path The path to a file containing the format for the Lexer
 	 * @return A Lexer for the given format
 	 */
@@ -66,6 +68,7 @@ public class BNFParser {
 	
 	/**
 	 * Parses the input String and returns a Lexer
+	 *
 	 * @param stream The InputStream the bnf contents can be read from
 	 * @return A Lexer for the given format
 	 */
