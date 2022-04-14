@@ -1,5 +1,5 @@
 # RedLex
-A flexible lexer generator library which can generate abstract syntax trees for any context-free format.
+A flexible lexer-generator/parser-combinator library which can generate abstract syntax trees for any context-free format, and parse those abstract syntax trees into objects using provided functions.
 
 Support Discord: https://discord.gg/agu5xGy2YZ
 
