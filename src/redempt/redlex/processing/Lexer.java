@@ -32,6 +32,7 @@ public class Lexer {
 	}
 
 	/**
+	 * Create a DebugLexer to diagnose issues with your bnf. Warning: Irreversibly mutates all tokens, even using this Lexer.
 	 * @return A DebugLexer which can be used to follow the lexing process and determine where something went wrong
 	 */
 	public DebugLexer debug() {
