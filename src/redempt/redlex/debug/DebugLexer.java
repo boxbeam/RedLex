@@ -8,6 +8,10 @@ import redempt.redlex.processing.Lexer;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * A specialized Lexer used for debugging
+ * @author Redempt
+ */
 public class DebugLexer extends Lexer {
 
 	private static TokenType debug(TokenType root, DebugHistory history) {
@@ -51,6 +55,9 @@ public class DebugLexer extends Lexer {
 		return super.tokenize(str, errorOnFail);
 	}
 
+	/**
+	 * @return The DebugHistory representing all steps for the previous call to tokenize
+	 */
 	public DebugHistory getDebugHistory() {
 		return history;
 	}

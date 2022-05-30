@@ -6,6 +6,10 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+/**
+ * Represents the entire history of a tokenizing process
+ * @author Redempt
+ */
 public class DebugHistory {
 
 	private int[][] breaks;

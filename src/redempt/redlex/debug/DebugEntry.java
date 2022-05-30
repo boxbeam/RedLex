@@ -2,6 +2,10 @@ package redempt.redlex.debug;
 
 import redempt.redlex.data.TokenType;
 
+/**
+ * Represents one step in the tokenizing process
+ * @author Redempt
+ */
 public class DebugEntry {
 
 	private int status;
@@ -18,22 +22,37 @@ public class DebugEntry {
 		this.depth = depth;
 	}
 
+	/**
+	 * @return The TokenType that performed this step
+	 */
 	public TokenType getOwner() {
 		return owner;
 	}
 
-	public int getRow() {
+	/**
+	 * @return The line number of the step
+	 */
+	public int getLine() {
 		return row;
 	}
 
+	/**
+	 * @return The column number of the step
+	 */
 	public int getCol() {
 		return getCol();
 	}
 
+	/**
+	 * @return The status of the step - 0 for begin, 1 for failure, 2 for success
+	 */
 	public int getStatus() {
 		return status;
 	}
 
+	/**
+	 * @return The depth of this step in the token tree
+	 */
 	public int getDepth() {
 		return depth;
 	}
@@ -51,6 +70,9 @@ public class DebugEntry {
 		}
 	}
 
+	/**
+	 * @return A String representation of this step
+	 */
 	@Override
 	public String toString() {
 		StringBuilder out = new StringBuilder();

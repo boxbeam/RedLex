@@ -7,6 +7,9 @@ import redempt.redlex.data.TokenType;
 
 import java.util.List;
 
+/**
+ * A wrapper for tokens that reports additional information for debug purposes
+ */
 public class DebugToken extends TokenType implements ParentToken {
 
 	private TokenType child;
@@ -18,6 +21,9 @@ public class DebugToken extends TokenType implements ParentToken {
 		this.history = history;
 	}
 
+	/**
+	 * @return The DebugHistory this token is reporting to
+	 */
 	public DebugHistory getHistory() {
 		return history;
 	}
