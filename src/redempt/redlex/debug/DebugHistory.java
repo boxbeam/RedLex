@@ -23,7 +23,7 @@ public class DebugHistory {
 			col++;
 			if (str.charAt(i) == '\n') {
 				line++;
-				col = 0;
+				col = 1;
 			}
 		}
 		breaks[breaks.length - 1] = breaks[breaks.length - 2];
