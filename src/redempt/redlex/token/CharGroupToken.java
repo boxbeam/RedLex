@@ -46,7 +46,7 @@ public class CharGroupToken extends TokenType {
 	}
 
 	@Override
-	protected List<Character> calcFirstCharacters() {
+	public List<Character> calcFirstCharacters() {
 		if (inverted) {
 			return Collections.singletonList(null);
 		}

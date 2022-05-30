@@ -73,7 +73,7 @@ public class RepeatingToken extends TokenType implements ParentToken {
 	}
 
 	@Override
-	protected List<Character> calcFirstCharacters() {
+	public List<Character> calcFirstCharacters() {
 		Set<Character> chars = new HashSet<>();
 		if (minMatches == 0) {
 			chars.add(null);

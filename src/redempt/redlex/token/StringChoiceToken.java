@@ -54,7 +54,7 @@ public class StringChoiceToken extends TokenType {
 	}
 
 	@Override
-	protected List<Character> calcFirstCharacters() {
+	public List<Character> calcFirstCharacters() {
 		return new ArrayList<>(tree.getFirstChars());
 	}
 

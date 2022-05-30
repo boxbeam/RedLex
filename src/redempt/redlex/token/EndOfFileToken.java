@@ -39,7 +39,7 @@ public class EndOfFileToken extends TokenType {
 	}
 
 	@Override
-	protected List<Character> calcFirstCharacters() {
+	public List<Character> calcFirstCharacters() {
 		return Collections.singletonList(null);
 	}
 

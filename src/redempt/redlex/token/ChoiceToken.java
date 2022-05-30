@@ -94,7 +94,7 @@ public class ChoiceToken extends TokenType implements ParentToken {
 	}
 
 	@Override
-	protected List<Character> calcFirstCharacters() {
+	public List<Character> calcFirstCharacters() {
 		Set<Character> chars = new HashSet<>();
 		for (TokenType child : children) {
 			chars.addAll(child.getFirstCharacters());
@@ -110,6 +110,7 @@ public class ChoiceToken extends TokenType implements ParentToken {
 	@Override
 	public void setChildren(TokenType[] children) {
 		this.children = children;
+		firstChars = null;
 	}
 	
 }

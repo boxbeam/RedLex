@@ -3,6 +3,7 @@ package redempt.redlex.processing;
 import redempt.redlex.data.LexContext;
 import redempt.redlex.data.Token;
 import redempt.redlex.data.TokenType;
+import redempt.redlex.debug.DebugLexer;
 import redempt.redlex.exception.LexException;
 
 import java.nio.file.Path;
@@ -29,7 +30,14 @@ public class Lexer {
 		this.root = root;
 		root.setLexer(this);
 	}
-	
+
+	/**
+	 * @return A DebugLexer which can be used to follow the lexing process and determine where something went wrong
+	 */
+	public DebugLexer debug() {
+		return new DebugLexer(root);
+	}
+
 	/**
 	 * @return The root TokenType for this Lexer
 	 */

@@ -146,7 +146,7 @@ public abstract class TokenType {
 	public abstract boolean lengthMatches(int length);
 	public abstract int minLength();
 	public abstract int maxLength();
-	protected abstract List<Character> calcFirstCharacters();
+	public abstract List<Character> calcFirstCharacters();
 
 	/**
 	 * @return A list of all the characters which may appear as the first character of this token. Includes null if this token may be zero-length.
@@ -164,7 +164,7 @@ public abstract class TokenType {
 	
 	@Override
 	public String toString() {
-		return name == null ? "(unnamed token " + id + ")" : name + " " + id;
+		return name == null ? "(unnamed token " + id + ")" : name;
 	}
 	
 }

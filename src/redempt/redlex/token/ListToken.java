@@ -78,7 +78,7 @@ public class ListToken extends TokenType implements ParentToken {
 	}
 
 	@Override
-	protected List<Character> calcFirstCharacters() {
+	public List<Character> calcFirstCharacters() {
 		Set<Character> chars = new HashSet<>();
 		int i = 0;
 		for (; i < children.length && children[i].minLength() == 0; i++) {

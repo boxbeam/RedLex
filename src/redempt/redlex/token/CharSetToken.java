@@ -42,7 +42,7 @@ public class CharSetToken extends TokenType {
 	}
 
 	@Override
-	protected List<Character> calcFirstCharacters() {
+	public List<Character> calcFirstCharacters() {
 		return inverted ? Collections.singletonList(null) : new ArrayList<>(chars);
 	}
 

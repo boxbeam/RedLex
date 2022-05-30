@@ -48,7 +48,7 @@ public class NotToken extends TokenType implements ParentToken {
 	}
 
 	@Override
-	protected List<Character> calcFirstCharacters() {
+	public List<Character> calcFirstCharacters() {
 		return Collections.singletonList(null);
 	}
 
