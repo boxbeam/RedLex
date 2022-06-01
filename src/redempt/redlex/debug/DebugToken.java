@@ -34,7 +34,7 @@ public class DebugToken extends TokenType implements ParentToken {
 	}
 
 	@Override
-	protected Token findForward(String str, int pos, LexContext ctx) {
+	public Token tryTokenize(String str, int pos, LexContext ctx) {
 		history.begin(this, pos);
 		Token value = child.tryTokenize(str, pos, ctx);
 		history.result(this, pos, value == null ? 0 : value.length(), value != null);
