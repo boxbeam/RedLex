@@ -37,7 +37,7 @@ public class BNFParser {
 		lexer.setRetainEmpty(false);
 		lexer.setRuleByName(CullStrategy.DELETE_ALL, "whitespace", "::=", "comment", "validChar");
 		lexer.setRuleByName(CullStrategy.LIFT_CHILDREN, "modifiers", "statementList", "tokenOrNested",
-				"tokenOrStatement", "tokenBase", "sentencesRep", "separator", "modifierChoice");
+				"tokenOrStatement", "tokenBase", "sentencesRep", "separator", "modifierChoice", "strChar");
 	}
 	
 	/**
@@ -92,16 +92,24 @@ public class BNFParser {
 		Map<String, List<Token>> map = token.allByNames(TraversalOrder.DEPTH_LEAF_FIRST,
 				"escapeSequence", "statementOpt", "token", "sentence", "nested");
 		for (Token escape : map.get("escapeSequence")) {
-			Token anyChar = escape.firstByName("anyChar");
-			escape.firstByName("escape").setValue("");
-			switch (anyChar.getValue().charAt(0)) {
+			String value = escape.getValue();
+			escape.setChildren(new Token[] {});
+			switch (value.charAt(1)) {
 				case 'n':
-					anyChar.setValue("\n");
+					escape.setValue("\n");
+					break;
+				case 'r':
+					escape.setValue("\r");
 					break;
 				case 't':
-					anyChar.setValue("\t");
+					escape.setValue("\t");
+					break;
+				case 'u':
+					int num = Integer.parseInt(value.substring(2), 16);
+					escape.setValue((char) num + "");
 					break;
 				default:
+					escape.setValue(value.charAt(1) + "");
 					break;
 			}
 		}
@@ -246,8 +254,8 @@ public class BNFParser {
 		if (strOpt == null) {
 			return new StringToken(null, "");
 		}
-		String val = strOpt.joinLeaves("");
-		return new StringToken("'" + val, strOpt.joinLeaves(""), caseSensitive);
+		String val = strOpt.joinChildren("");
+		return new StringToken("'" + val, val, caseSensitive);
 	}
 	
 	private static TokenType createTokenReference(Token t) {

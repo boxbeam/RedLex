@@ -18,7 +18,9 @@ class BNFLexer {
 	private static TokenType commentPrefix = new StringToken("#", "#");
 	private static TokenType escape = new StringToken("escape", "\\");
 	private static TokenType anyChar = new CharGroupToken("anyChar", (char) 0, (char) 0, true);
-	private static TokenType escapeSequence = new ListToken("escapeSequence", escape, anyChar);
+	private static TokenType hexChar = new CharSetToken("hexChar", "0123456789abcdefABCDEF".toCharArray());
+	private static TokenType unicodeSequence = new ListToken("unicodeEscape", new StringToken(null, "u"), new RepeatingToken("hexQuad", hexChar, 4, 4));
+	private static TokenType escapeSequence = new ListToken("escapeSequence", escape, new ChoiceToken("escapeChoice", unicodeSequence, anyChar));
 	private static TokenType obrack = new StringToken("[", "[");
 	private static TokenType oparen = new StringToken(null, "(");
 	private static TokenType caret = new StringToken("^", "^");
@@ -54,10 +56,9 @@ class BNFLexer {
 		TokenType optI = new RepeatingToken("insensitive", new StringToken(null, "i"), 0, 1);
 		TokenType notQuote = new CharGroupToken("notQuote", '"', '"', true);
 		TokenType stringChar = new ChoiceToken("strChar", escapeSequence, notQuote);
-		TokenType stringRep = new RepeatingToken("strRep", stringChar);
-		TokenType stringOpt = new RepeatingToken("strOpt", stringRep, 0, 1);
+		TokenType stringRep = new RepeatingToken("strOpt", stringChar, 0, Integer.MAX_VALUE);
 		TokenType quote = new StringToken("quote", "\"");
-		TokenType string = new ListToken("string", optI, quote, stringOpt, quote);
+		TokenType string = new ListToken("string", optI, quote, stringRep, quote);
 		return string;
 	}
 	

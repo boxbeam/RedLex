@@ -33,7 +33,15 @@ public class RedLexTest {
 		assertThrows(BNFException.class, () -> BNFParser.createLexer("root ::= root"));
 		assertThrows(BNFException.class, () -> BNFParser.createLexer("root ::= test"));
 	}
-	
+
+	@Test
+	public void unicodeEscapeTest() {
+		Lexer lexer = BNFParser.createLexer("root ::= \"\\u0061\"");
+		assertDoesNotThrow(() -> lexer.tokenize("a"));
+		assertThrows(LexException.class, () -> lexer.tokenize("b"));
+		assertThrows(LexException.class, () -> lexer.tokenize("u0061"));
+	}
+
 	@Test
 	public void JSONTest() {
 		Lexer lexer = BNFParser.createLexer(getClass().getClassLoader().getResourceAsStream("json.bnf"));
