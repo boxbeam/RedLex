@@ -37,16 +37,16 @@ public class DebugHistory {
 		if (type.getName() == null) {
 			return;
 		}
-		entries.add(new DebugEntry(type, breaks[pos][0], breaks[pos][1], stack.size(), 0));
+		entries.add(new DebugEntry(type, breaks[pos][0], breaks[pos][1], 0, stack.size(), 0));
 		stack.add(type);
 	}
 
-	public void result(TokenType type, int pos, boolean success) {
+	public void result(TokenType type, int pos, int length, boolean success) {
 		if (type.getName() == null) {
 			return;
 		}
 		stack.removeLast();
-		entries.add(new DebugEntry(type, breaks[pos][0], breaks[pos][1], stack.size(), success ? 2 : 1));
+		entries.add(new DebugEntry(type, breaks[pos][0], breaks[pos][1], length, stack.size(), success ? 2 : 1));
 	}
 
 	public DebugHistory filter(String... names) {
@@ -60,6 +60,13 @@ public class DebugHistory {
 		return this;
 	}
 
+	public List<DebugEntry> getEntries() {
+		return entries;
+	}
+
+	/**
+	 * @return A formatted description of all tokenizing actions
+	 */
 	@Override
 	public String toString() {
 		return entries.stream().map(DebugEntry::toString).collect(Collectors.joining("\n"));

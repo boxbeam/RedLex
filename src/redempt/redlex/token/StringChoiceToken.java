@@ -24,8 +24,7 @@ public class StringChoiceToken extends TokenType {
 	}
 	
 	@Override
-	public Token findForward(String str, int pos, LexContext ctx) {
-		ctx.update(pos, this);
+	protected Token findForward(String str, int pos, LexContext ctx) {
 		int len = tree.findForward(str, pos);
 		if (len == -1) {
 			return null;
@@ -54,7 +53,7 @@ public class StringChoiceToken extends TokenType {
 	}
 
 	@Override
-	public List<Character> calcFirstCharacters() {
+	protected List<Character> calcFirstCharacters() {
 		return new ArrayList<>(tree.getFirstChars());
 	}
 

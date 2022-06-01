@@ -115,7 +115,7 @@ public class Lexer {
 	 */
 	public Token tokenize(String str, boolean errorOnFail) {
 		LexContext ctx = new LexContext();
-		Token inst = root.findForward(str, 0, ctx);
+		Token inst = root.tryTokenize(str, 0, ctx);
 		if (inst == null || inst.length() != str.length()) {
 			if (!errorOnFail) {
 				return null;
@@ -124,8 +124,8 @@ public class Lexer {
 			type = type == null ? root : type;
 			int[] pos = cursorPos(str, ctx.getLastPos());
 			String[] split = str.split("\n");
-			throw new LexException(type.getMessage() + " token on line " + (pos[0] + 1) + ", column " + pos[1] + ": " + type
-					+ "\n" + split[pos[0]]
+			throw new LexException(type.getMessage() + " token on line " + (pos[0] + 1) + ", column " + (pos[1] + 1) + ": " + type
+					+ "\n" + (split.length == 0 ? "" : split[pos[0]])
 					+ "\n" + repeat(" ", pos[1]) + "^");
 		}
 		return inst;

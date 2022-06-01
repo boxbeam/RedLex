@@ -35,6 +35,7 @@ public class ChoiceToken extends TokenType implements ParentToken {
 		if (minLength != -1) {
 			return;
 		}
+		minLength = 0;
 		for (TokenType child : children) {
 			minLength = Math.min(child.minLength(), minLength);
 			maxLength = Math.max(child.maxLength(), maxLength);
@@ -47,8 +48,7 @@ public class ChoiceToken extends TokenType implements ParentToken {
 	}
 	
 	@Override
-	public Token findForward(String str, int pos, LexContext ctx) {
-		ctx.update(pos, this);
+	protected Token findForward(String str, int pos, LexContext ctx) {
 		initMap();
 		if (pos < str.length()) {
 			char c = str.charAt(pos);
@@ -67,7 +67,7 @@ public class ChoiceToken extends TokenType implements ParentToken {
 			return null;
 		}
 		for (TokenType child : children) {
-			Token inst = child.findForward(str, pos, ctx);
+			Token inst = child.tryTokenize(str, pos, ctx);
 			if (inst != null) {
 				return new Token(this, inst.getBaseString(), inst.getStart(), inst.getEnd(), new Token[] {inst});
 			}
@@ -94,7 +94,7 @@ public class ChoiceToken extends TokenType implements ParentToken {
 	}
 
 	@Override
-	public List<Character> calcFirstCharacters() {
+	protected List<Character> calcFirstCharacters() {
 		Set<Character> chars = new HashSet<>();
 		for (TokenType child : children) {
 			chars.addAll(child.getFirstCharacters());

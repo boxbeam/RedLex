@@ -1,0 +1,5 @@
+root ::= number
+number ::= decimal | int
+digit ::= [0-9]+
+int ::= "-"? digit+
+decimal ::= "-"? int "." int

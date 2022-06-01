@@ -86,9 +86,21 @@ public abstract class TokenType {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public Token findForward(String str, int pos, LexContext ctx) {
-		ctx.update(pos, this);
+
+	public Token tryTokenize(String str, int pos, LexContext ctx) {
+		if (ctx == null) {
+			return findForward(str, pos, ctx);
+		}
+		if (!ctx.update(pos, this) && this instanceof ParentToken) {
+			ctx.pop();
+			return null;
+		}
+		Token token = findForward(str, pos, ctx);
+		ctx.pop();
+		return token;
+	}
+
+	protected Token findForward(String str, int pos, LexContext ctx) {
 		int start = pos;
 		int offset = 0;
 		while (pos < str.length() && offset < maxLength() && characterMatches(str, pos, offset)) {
@@ -106,7 +118,8 @@ public abstract class TokenType {
 	}
 	
 	public void replacePlaceholders(Map<String, TokenType> tokens) {
-		int[] counter = {0};
+		id = 1;
+		int[] counter = {2};
 		walk(t -> {
 			t.id = counter[0]++;
 			if (!(t instanceof ParentToken)) {
@@ -146,7 +159,7 @@ public abstract class TokenType {
 	public abstract boolean lengthMatches(int length);
 	public abstract int minLength();
 	public abstract int maxLength();
-	public abstract List<Character> calcFirstCharacters();
+	protected abstract List<Character> calcFirstCharacters();
 
 	/**
 	 * @return A list of all the characters which may appear as the first character of this token. Includes null if this token may be zero-length.

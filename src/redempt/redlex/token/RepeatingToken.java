@@ -33,12 +33,11 @@ public class RepeatingToken extends TokenType implements ParentToken {
 	}
 	
 	@Override
-	public Token findForward(String str, int pos, LexContext ctx) {
-		ctx.update(pos, this);
+	protected Token findForward(String str, int pos, LexContext ctx) {
 		List<Token> list = new ArrayList<>();
 		int start = pos;
 		while (pos < str.length() && list.size() < maxMatches) {
-			Token inst = token.findForward(str, pos, ctx);
+			Token inst = token.tryTokenize(str, pos, ctx);
 			if (inst == null) {
 				break;
 			}
@@ -73,7 +72,7 @@ public class RepeatingToken extends TokenType implements ParentToken {
 	}
 
 	@Override
-	public List<Character> calcFirstCharacters() {
+	protected List<Character> calcFirstCharacters() {
 		Set<Character> chars = new HashSet<>();
 		if (minMatches == 0) {
 			chars.add(null);

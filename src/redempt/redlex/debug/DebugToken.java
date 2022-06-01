@@ -34,10 +34,10 @@ public class DebugToken extends TokenType implements ParentToken {
 	}
 
 	@Override
-	public Token findForward(String str, int pos, LexContext ctx) {
+	protected Token findForward(String str, int pos, LexContext ctx) {
 		history.begin(this, pos);
-		Token value = child.findForward(str, pos, ctx);
-		history.result(this, pos, value != null);
+		Token value = child.tryTokenize(str, pos, ctx);
+		history.result(this, pos, value == null ? 0 : value.length(), value != null);
 		return value;
 	}
 
@@ -57,8 +57,8 @@ public class DebugToken extends TokenType implements ParentToken {
 	}
 
 	@Override
-	public List<Character> calcFirstCharacters() {
-		return child.calcFirstCharacters();
+	protected List<Character> calcFirstCharacters() {
+		return child.getFirstCharacters();
 	}
 
 	@Override

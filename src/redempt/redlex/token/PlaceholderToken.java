@@ -31,7 +31,7 @@ public class PlaceholderToken extends TokenType {
 	}
 
 	@Override
-	public List<Character> calcFirstCharacters() {
+	protected List<Character> calcFirstCharacters() {
 		return null;
 	}
 

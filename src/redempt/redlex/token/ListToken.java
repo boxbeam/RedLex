@@ -25,6 +25,7 @@ public class ListToken extends TokenType implements ParentToken {
 		if (minLength != -1) {
 			return;
 		}
+		minLength = 0;
 		for (TokenType child : children) {
 			minLength += child.minLength();
 			if (maxLength == Integer.MAX_VALUE || child.maxLength() == Integer.MAX_VALUE) {
@@ -41,15 +42,12 @@ public class ListToken extends TokenType implements ParentToken {
 	}
 	
 	@Override
-	public Token findForward(String str, int pos, LexContext ctx) {
-		if (!ctx.update(pos, this)) {
-			return null;
-		}
+	protected Token findForward(String str, int pos, LexContext ctx) {
 		Token[] arr = new Token[children.length];
 		int start = pos;
 		int i = 0;
 		for (; i < children.length; i++) {
-			Token inst = children[i].findForward(str, pos, ctx);
+			Token inst = children[i].tryTokenize(str, pos, ctx);
 			if (inst == null) {
 				return null;
 			}
@@ -78,7 +76,7 @@ public class ListToken extends TokenType implements ParentToken {
 	}
 
 	@Override
-	public List<Character> calcFirstCharacters() {
+	protected List<Character> calcFirstCharacters() {
 		Set<Character> chars = new HashSet<>();
 		int i = 0;
 		for (; i < children.length && children[i].minLength() == 0; i++) {

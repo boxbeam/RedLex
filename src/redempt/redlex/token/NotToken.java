@@ -23,9 +23,8 @@ public class NotToken extends TokenType implements ParentToken {
 	}
 	
 	@Override
-	public Token findForward(String str, int pos, LexContext ctx) {
-		ctx.update(pos, this);
-		Token inst = token.findForward(str, pos, new LexContext());
+	protected Token findForward(String str, int pos, LexContext ctx) {
+		Token inst = token.tryTokenize(str, pos, null);
 		if (inst == null) {
 			return new Token(this, "", 0, 0);
 		}
@@ -48,7 +47,7 @@ public class NotToken extends TokenType implements ParentToken {
 	}
 
 	@Override
-	public List<Character> calcFirstCharacters() {
+	protected List<Character> calcFirstCharacters() {
 		return Collections.singletonList(null);
 	}
 

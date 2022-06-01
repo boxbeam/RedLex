@@ -3,15 +3,20 @@ package redempt.redlex.test;
 import org.junit.jupiter.api.Test;
 import redempt.redlex.bnf.BNFParser;
 import redempt.redlex.data.Token;
+import redempt.redlex.debug.DebugLexer;
 import redempt.redlex.exception.BNFException;
 import redempt.redlex.exception.LexException;
 import redempt.redlex.processing.CullStrategy;
 import redempt.redlex.processing.Lexer;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class RedLexTest {
-	
+
 	@Test
 	public void syntaxTest() {
 		assertThrows(LexException.class, () -> BNFParser.createLexer("root::= [a-z]"));
@@ -68,6 +73,24 @@ public class RedLexTest {
 		assertDoesNotThrow(() -> lexer.tokenize("ba"));
 		assertThrows(LexException.class, () -> lexer.tokenize("aaa"));
 
+	}
+
+	@Test
+	public void notNewlineTest() {
+		Lexer lexer = BNFParser.createLexer("root ::= [^\\n]");
+		assertThrows(LexException.class, () -> lexer.tokenize("\n"));
+		assertDoesNotThrow(() -> lexer.tokenize("a"));
+	}
+
+	@Test
+	public void recursionStopTest() {
+		Lexer lexer = BNFParser.createLexer(getClass().getClassLoader().getResourceAsStream("recursive_list.bnf"));
+		assertDoesNotThrow(() -> lexer.tokenize("a b c"));
+
+		Lexer lexer2 = BNFParser.createLexer(getClass().getClassLoader().getResourceAsStream("numbers.bnf"));
+		assertDoesNotThrow(() -> lexer2.tokenize("1.23"));
+		assertDoesNotThrow(() -> lexer2.tokenize("-4"));
+		assertThrows(LexException.class, () -> lexer2.tokenize("abc"));
 	}
 
 	@Test

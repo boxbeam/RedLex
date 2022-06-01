@@ -12,13 +12,15 @@ public class DebugEntry {
 	private int row;
 	private int col;
 	private int depth;
+	private int length;
 	private TokenType owner;
 
-	public DebugEntry(TokenType owner, int row, int col, int depth, int status) {
+	public DebugEntry(TokenType owner, int row, int col, int length, int depth, int status) {
 		this.owner = owner;
 		this.row = row;
 		this.col = col;
 		this.status = status;
+		this.length = length;
 		this.depth = depth;
 	}
 
@@ -41,6 +43,10 @@ public class DebugEntry {
 	 */
 	public int getCol() {
 		return getCol();
+	}
+
+	public int getLength() {
+		return length;
 	}
 
 	/**
@@ -79,7 +85,7 @@ public class DebugEntry {
 		for (int i = 0; i < depth; i++) {
 			out.append("  ");
 		}
-		out.append(owner.getName()).append(" ").append(getStatusString()).append(" at line ").append(row).append(", column ").append(col);
+		out.append(owner.getName()).append(" ").append(getStatusString()).append(" at line ").append(row).append(", column ").append(col).append(status == 2 ? " (length " + length + ")" : "");
 		return out.toString();
 	}
 

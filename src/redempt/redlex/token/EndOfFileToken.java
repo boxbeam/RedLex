@@ -19,7 +19,7 @@ public class EndOfFileToken extends TokenType {
 	}
 	
 	@Override
-	public Token findForward(String str, int pos, LexContext ctx) {
+	protected Token findForward(String str, int pos, LexContext ctx) {
 		return pos == str.length() ? new Token(this, "", 0, 0) : null;
 	}
 	
@@ -39,7 +39,7 @@ public class EndOfFileToken extends TokenType {
 	}
 
 	@Override
-	public List<Character> calcFirstCharacters() {
+	protected List<Character> calcFirstCharacters() {
 		return Collections.singletonList(null);
 	}
 

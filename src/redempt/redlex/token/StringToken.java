@@ -57,7 +57,7 @@ public class StringToken extends TokenType {
 	}
 
 	@Override
-	public List<Character> calcFirstCharacters() {
+	protected List<Character> calcFirstCharacters() {
 		if (!caseSensitive && string.length() > 0) {
 			List<Character> chars = new ArrayList<>();
 			chars.add(string.charAt(0));

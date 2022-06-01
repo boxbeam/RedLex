@@ -4,6 +4,7 @@ import redempt.redlex.data.TokenType;
 import redempt.redlex.processing.Lexer;
 import redempt.redlex.token.*;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -121,6 +122,7 @@ class BNFLexer {
 		TokenType line = new ChoiceToken("line", comment, sentence);
 		TokenType sentenceList = new ListToken("sentences", line, sepOrEnd);
 		TokenType sentenceRep = new RepeatingToken("sentencesRep", sentenceList);
+		sentenceRep.replacePlaceholders(Collections.emptyMap());
 		return sentenceRep;
 	}
 	
