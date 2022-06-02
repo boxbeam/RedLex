@@ -31,7 +31,7 @@ public class RedLexTest {
 	@Test
 	public void selfReferenceTest() {
 		assertThrows(BNFException.class, () -> BNFParser.createLexer("root ::= root"));
-		assertThrows(BNFException.class, () -> BNFParser.createLexer("root ::= test"));
+		assertThrows(BNFException.class, () -> BNFParser.createLexer("root ::= test\ntest ::= test"));
 	}
 
 	@Test

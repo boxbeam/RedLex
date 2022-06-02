@@ -118,7 +118,7 @@ public class BNFParser {
 		}
 		Map<String, TokenType> tokens = new HashMap<>();
 		for (Token t : map.get("token")) {
-			TokenType type = createToken(t, tokens);
+			TokenType type = createToken(t);
 			t.replaceWith(type);
 		}
 		for (Token t : map.get("sentence")) {
@@ -134,17 +134,18 @@ public class BNFParser {
 			throw new BNFException("No root node specified");
 		}
 		Set<String> used = new HashSet<>();
-		while (root instanceof PlaceholderToken) {
-			if (!used.add(root.getName())) {
-				throw new BNFException("Circular reference or undefined tokens: " + String.join(", ", used));
+		while (root instanceof WrapperToken) {
+			TokenType wrapped = ((WrapperToken) root).getChildren()[0];
+			if (!tokens.containsKey(wrapped.getName()) || !used.add(wrapped.getName())) {
+				throw new BNFException("Circular reference or undefined token: " + String.join(", ", wrapped.getName()));
 			}
-			root = tokens.get(root.getName());
+			root = tokens.get(wrapped.getName());
 		}
 		root.replacePlaceholders(tokens);
 		return root;
 	}
 	
-	private static TokenType createToken(Token input, Map<String, TokenType> map) {
+	private static TokenType createToken(Token input) {
 		Token[] children = input.getChildren();
 		boolean not = children[0].getType().getName().equals("!");
 		Token token = children[not ? 1 : 0];
@@ -161,7 +162,6 @@ public class BNFParser {
 				break;
 			case "word":
 				type = createTokenReference(token);
-				map.putIfAbsent(type.getName(), type);
 				break;
 			case "eof":
 				type = new EndOfFileToken(null);
@@ -223,7 +223,11 @@ public class BNFParser {
 			}
 			t.replaceWith(token);
 		}
-		return createStatement(sentence.firstByName("statement"));
+		TokenType token = createStatement(sentence.firstByName("statement"));
+		if (token instanceof PlaceholderToken) {
+			token = new WrapperToken(null, token);
+		}
+		return token;
 	}
 	
 	private static TokenType createStatement(Token statement) {

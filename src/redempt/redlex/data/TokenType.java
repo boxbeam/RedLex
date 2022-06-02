@@ -1,5 +1,6 @@
 package redempt.redlex.data;
 
+import redempt.redlex.exception.BNFException;
 import redempt.redlex.processing.Lexer;
 import redempt.redlex.token.PlaceholderToken;
 
@@ -129,10 +130,13 @@ public abstract class TokenType {
 			TokenType[] children = parent.getChildren();
 			for (int i = 0; i < children.length; i++) {
 				TokenType child = children[i];
-				if (!(child instanceof PlaceholderToken) || !tokens.containsKey(child.getName())) {
+				if (!(child instanceof PlaceholderToken)) {
 					continue;
 				}
 				children[i] = tokens.get(child.getName());
+				if (children[i] == null) {
+					throw new BNFException("Reference to nonexistent token " + child.getName());
+				}
 			}
 			parent.setChildren(children);
 		});
