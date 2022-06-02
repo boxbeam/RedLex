@@ -24,7 +24,7 @@ public class NotToken extends TokenType implements ParentToken {
 	
 	@Override
 	protected Token findForward(String str, int pos, LexContext ctx) {
-		Token inst = token.tryTokenize(str, pos, null);
+		Token inst = token.tryTokenize(str, pos, ctx);
 		if (inst == null) {
 			return new Token(this, "", 0, 0);
 		}
