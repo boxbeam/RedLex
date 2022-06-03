@@ -39,6 +39,9 @@ public class WrapperToken extends TokenType implements ParentToken {
 	@Override
 	protected Token findForward(String str, int pos, LexContext ctx) {
 		Token token = child.tryTokenize(str, pos, ctx);
+		if (token == null) {
+			return null;
+		}
 		return new Token(this, str, token.getStart(), token.getEnd(), new Token[] {token});
 	}
 
