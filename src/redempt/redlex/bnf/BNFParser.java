@@ -93,7 +93,7 @@ public class BNFParser {
 				"escapeSequence", "statementOpt", "token", "sentence", "nested");
 		for (Token escape : map.get("escapeSequence")) {
 			String value = escape.getValue();
-			escape.setChildren(new Token[] {});
+			escape.setChildren(Token.EMPTY);
 			switch (value.charAt(1)) {
 				case 'n':
 					escape.setValue("\n");

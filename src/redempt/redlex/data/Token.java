@@ -439,7 +439,7 @@ public class Token {
 				case DELETE_ALL:
 					break;
 				case DELETE_CHILDREN:
-					child.setChildren(new Token[] {});
+					child.setChildren(Token.EMPTY);
 					list.add(child);
 					break;
 				case LIFT_CHILDREN:
