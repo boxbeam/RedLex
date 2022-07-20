@@ -28,11 +28,6 @@ public class RepeatingToken extends TokenType implements ParentToken {
 	}
 	
 	@Override
-	public boolean characterMatches(String input, int pos, int offset) {
-		return false;
-	}
-	
-	@Override
 	protected Token findForward(String str, int pos, LexContext ctx) {
 		List<Token> list = new ArrayList<>();
 		int start = pos;
@@ -54,21 +49,8 @@ public class RepeatingToken extends TokenType implements ParentToken {
 	}
 	
 	@Override
-	public boolean lengthMatches(int length) {
-		if (token.minLength() == token.maxLength()) {
-			return length > 0 && length % token.maxLength() == 0;
-		}
-		return length >= token.minLength();
-	}
-	
-	@Override
 	public int minLength() {
 		return token.minLength();
-	}
-	
-	@Override
-	public int maxLength() {
-		return Integer.MAX_VALUE;
 	}
 
 	@Override

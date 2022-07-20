@@ -12,7 +12,6 @@ public class ChoiceToken extends TokenType implements ParentToken {
 	private Map<Character, List<TokenType>> firstChars;
 	private TokenType[] children;
 	private int minLength = -1;
-	private int maxLength = -1;
 	
 	public ChoiceToken(String name, TokenType... children) {
 		super(name);
@@ -38,13 +37,7 @@ public class ChoiceToken extends TokenType implements ParentToken {
 		minLength = 0;
 		for (TokenType child : children) {
 			minLength = Math.min(child.minLength(), minLength);
-			maxLength = Math.max(child.maxLength(), maxLength);
 		}
-	}
-	
-	@Override
-	public boolean characterMatches(String input, int pos, int offset) {
-		return false;
 	}
 	
 	@Override
@@ -76,21 +69,9 @@ public class ChoiceToken extends TokenType implements ParentToken {
 	}
 	
 	@Override
-	public boolean lengthMatches(int length) {
-		initLength();
-		return length >= minLength && length <= maxLength;
-	}
-	
-	@Override
 	public int minLength() {
 		initLength();
 		return minLength;
-	}
-	
-	@Override
-	public int maxLength() {
-		initLength();
-		return maxLength;
 	}
 
 	@Override

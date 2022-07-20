@@ -32,11 +32,6 @@ public class WrapperToken extends TokenType implements ParentToken {
 	}
 
 	@Override
-	public boolean characterMatches(String input, int pos, int offset) {
-		return child.characterMatches(input, pos, offset);
-	}
-
-	@Override
 	protected Token findForward(String str, int pos, LexContext ctx) {
 		Token token = child.tryTokenize(str, pos, ctx);
 		if (token == null) {
@@ -46,18 +41,8 @@ public class WrapperToken extends TokenType implements ParentToken {
 	}
 
 	@Override
-	public boolean lengthMatches(int length) {
-		return child.lengthMatches(length);
-	}
-
-	@Override
 	public int minLength() {
 		return child.minLength();
-	}
-
-	@Override
-	public int maxLength() {
-		return child.maxLength();
 	}
 
 	@Override

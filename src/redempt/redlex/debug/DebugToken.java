@@ -29,31 +29,21 @@ public class DebugToken extends TokenType implements ParentToken {
 	}
 
 	@Override
-	public boolean characterMatches(String input, int pos, int offset) {
-		return child.characterMatches(input, pos, offset);
-	}
-
-	@Override
 	public Token tryTokenize(String str, int pos, LexContext ctx) {
 		history.begin(this, pos);
 		Token value = child.tryTokenize(str, pos, ctx);
 		history.result(this, pos, value == null ? 0 : value.length(), value != null);
 		return value;
 	}
-
+	
 	@Override
-	public boolean lengthMatches(int length) {
-		return child.lengthMatches(length);
+	protected Token findForward(String str, int pos, LexContext ctx) {
+		return null;
 	}
 
 	@Override
 	public int minLength() {
 		return child.minLength();
-	}
-
-	@Override
-	public int maxLength() {
-		return child.maxLength();
 	}
 
 	@Override

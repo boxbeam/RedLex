@@ -1,5 +1,7 @@
 package redempt.redlex.token;
 
+import redempt.redlex.data.LexContext;
+import redempt.redlex.data.Token;
 import redempt.redlex.data.TokenType;
 
 import java.util.*;
@@ -22,22 +24,14 @@ public class CharSetToken extends TokenType {
 	}
 	
 	@Override
-	public boolean characterMatches(String input, int pos, int offset) {
-		return inverted ^ chars.contains(input.charAt(pos));
-	}
-	
-	@Override
-	public boolean lengthMatches(int length) {
-		return length == 1;
+	public Token findForward(String input, int pos, LexContext context) {
+		return pos < input.length() && (inverted ^ chars.contains(input.charAt(pos)))
+				? new Token(this, input, pos, pos + 1)
+				: null;
 	}
 	
 	@Override
 	public int minLength() {
-		return 1;
-	}
-	
-	@Override
-	public int maxLength() {
 		return 1;
 	}
 

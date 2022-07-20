@@ -14,27 +14,12 @@ public class EndOfFileToken extends TokenType {
 	}
 	
 	@Override
-	public boolean characterMatches(String input, int pos, int offset) {
-		return false;
-	}
-	
-	@Override
 	protected Token findForward(String str, int pos, LexContext ctx) {
 		return pos == str.length() ? new Token(this, "", 0, 0) : null;
 	}
 	
 	@Override
-	public boolean lengthMatches(int length) {
-		return false;
-	}
-	
-	@Override
 	public int minLength() {
-		return 0;
-	}
-	
-	@Override
-	public int maxLength() {
 		return 0;
 	}
 

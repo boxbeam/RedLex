@@ -18,11 +18,6 @@ public class NotToken extends TokenType implements ParentToken {
 	}
 	
 	@Override
-	public boolean characterMatches(String input, int pos, int offset) {
-		return false;
-	}
-	
-	@Override
 	protected Token findForward(String str, int pos, LexContext ctx) {
 		Token inst = token.tryTokenize(str, pos, ctx);
 		if (inst == null) {
@@ -32,18 +27,8 @@ public class NotToken extends TokenType implements ParentToken {
 	}
 	
 	@Override
-	public boolean lengthMatches(int length) {
-		return length == 0;
-	}
-	
-	@Override
 	public int minLength() {
 		return 0;
-	}
-	
-	@Override
-	public int maxLength() {
-		return token.maxLength();
 	}
 
 	@Override

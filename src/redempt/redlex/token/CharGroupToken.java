@@ -1,5 +1,7 @@
 package redempt.redlex.token;
 
+import redempt.redlex.data.LexContext;
+import redempt.redlex.data.Token;
 import redempt.redlex.data.TokenType;
 
 import java.util.ArrayList;
@@ -25,23 +27,18 @@ public class CharGroupToken extends TokenType {
 	}
 	
 	@Override
-	public boolean characterMatches(String input, int pos, int offset) {
-		char c = input.charAt(pos);
-		return inverted ^ (c <= max && c >= min);
-	}
-	
-	@Override
-	public boolean lengthMatches(int length) {
-		return length == 1;
+	protected Token findForward(String str, int pos, LexContext ctx) {
+		if (pos >= str.length()) {
+			return null;
+		}
+		char c = str.charAt(pos);
+		return inverted ^ (c <= max && c >= min)
+				? new Token(this, str, pos, pos + 1)
+				: null;
 	}
 	
 	@Override
 	public int minLength() {
-		return 1;
-	}
-	
-	@Override
-	public int maxLength() {
 		return 1;
 	}
 

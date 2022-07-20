@@ -100,19 +100,6 @@ public abstract class TokenType {
 		ctx.pop();
 		return token;
 	}
-
-	protected Token findForward(String str, int pos, LexContext ctx) {
-		int start = pos;
-		int offset = 0;
-		while (pos < str.length() && offset < maxLength() && characterMatches(str, pos, offset)) {
-			pos++;
-			offset++;
-		}
-		if (!lengthMatches(offset)) {
-			return null;
-		}
-		return new Token(this, str, start, pos);
-	}
 	
 	public String getMessage() {
 		return "Expected";
@@ -159,10 +146,8 @@ public abstract class TokenType {
 		}
 	}
 	
-	public abstract boolean characterMatches(String input, int pos, int offset);
-	public abstract boolean lengthMatches(int length);
+	protected abstract Token findForward(String str, int pos, LexContext ctx);
 	public abstract int minLength();
-	public abstract int maxLength();
 	protected abstract List<Character> calcFirstCharacters();
 
 	/**

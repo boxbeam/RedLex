@@ -14,7 +14,6 @@ public class ListToken extends TokenType implements ParentToken {
 	
 	private TokenType[] children;
 	private int minLength = -1;
-	private int maxLength = -1;
 	
 	public ListToken(String name, TokenType... children) {
 		super(name);
@@ -28,17 +27,7 @@ public class ListToken extends TokenType implements ParentToken {
 		minLength = 0;
 		for (TokenType child : children) {
 			minLength += child.minLength();
-			if (maxLength == Integer.MAX_VALUE || child.maxLength() == Integer.MAX_VALUE) {
-				maxLength = Integer.MAX_VALUE;
-				continue;
-			}
-			maxLength += child.maxLength();
 		}
-	}
-	
-	@Override
-	public boolean characterMatches(String input, int pos, int offset) {
-		return false;
 	}
 	
 	@Override
@@ -58,21 +47,9 @@ public class ListToken extends TokenType implements ParentToken {
 	}
 	
 	@Override
-	public boolean lengthMatches(int length) {
-		initLength();
-		return length >= minLength && length <= maxLength;
-	}
-	
-	@Override
 	public int minLength() {
 		initLength();
 		return minLength;
-	}
-	
-	@Override
-	public int maxLength() {
-		initLength();
-		return maxLength;
 	}
 
 	@Override

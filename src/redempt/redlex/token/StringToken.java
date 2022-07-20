@@ -1,5 +1,7 @@
 package redempt.redlex.token;
 
+import redempt.redlex.data.LexContext;
+import redempt.redlex.data.Token;
 import redempt.redlex.data.TokenType;
 
 import java.util.ArrayList;
@@ -30,16 +32,10 @@ public class StringToken extends TokenType {
 	}
 	
 	@Override
-	public boolean characterMatches(String input, int pos, int offset) {
-		if (!caseSensitive) {
-			return Character.toLowerCase(input.charAt(pos)) == string.charAt(offset);
-		}
-		return input.charAt(pos) == string.charAt(offset);
-	}
-	
-	@Override
-	public boolean lengthMatches(int length) {
-		return length == string.length();
+	protected Token findForward(String str, int pos, LexContext ctx) {
+		return string.regionMatches(!caseSensitive, 0, str, pos, string.length())
+				? new Token(this, str, pos, pos + string.length())
+				: null;
 	}
 	
 	public String getString() {
@@ -48,11 +44,6 @@ public class StringToken extends TokenType {
 	
 	@Override
 	public int minLength() {
-		return string.length();
-	}
-	
-	@Override
-	public int maxLength() {
 		return string.length();
 	}
 
