@@ -37,10 +37,9 @@ public class Parser {
 		this.lexer = lexer;
 		Set<TokenType> tokens = new TreeSet<>(Comparator.comparingInt(TokenType::getId));
 		lexer.getRoot().walk(tokens::add);
-		this.components = new ParserComponent[tokens.size()];
-		int pos = 0;
+		this.components = new ParserComponent[tokens.size() + 2];
 		for (TokenType type : tokens) {
-			this.components[pos++] = components.get(type.getName());
+			this.components[type.getId()] = components.get(type.getName());
 		}
 	}
 	
